@@ -10,7 +10,9 @@ def main():
     parser.add_argument('--confluenceSpace', help='e.g. ~989819389 (Personal Space), 78712486')
     parser.add_argument('--confluenceParentPageId', help='e.g. "Page Information: ?pageId=1650458860')
     parser.add_argument('--confluencePageTitleSuffix', help='e.g. "[MySuffix]"')
-    parser.add_argument('--markdownDir', help='e.g. ./docs/markdown')
+    parser.add_argument('--markdownDir', help='e.g. "../mydocs"')
+    parser.add_argument('--dbPath', help='e.g. "./dbs/mydocs.db"')
+    
     args = parser.parse_args()
 
     confluencePublisher = ConfluencePublisher(
@@ -18,6 +20,7 @@ def main():
         args.confluenceUsername,
         args.confluenceApiToken,
         args.markdownDir,
+        args.dbPath,
         args.confluenceSpace,
         args.confluenceParentPageId)
 

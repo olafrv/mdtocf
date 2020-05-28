@@ -3,8 +3,8 @@ import hashlib
 import pickledb
 
 class KeyValue():
-    def __init__(self, dirPath):
-        self.db = pickledb.load(dirPath + os.sep + 'hashes.db', False)
+    def __init__(self, dbPath):
+        self.db = pickledb.load(dbPath, False)
 
     def __del__(self):
         self.db.dump()

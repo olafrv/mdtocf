@@ -6,12 +6,12 @@ from atlassian import Confluence
 
 class ConfluencePublisher():
 
-    def __init__(self, url, username, apiToken, markdownDir, space, parentPageId):
+    def __init__(self, url, username, apiToken, markdownDir, dbPath, space, parentPageId):
         self.api = Confluence(url=url, username=username, password=apiToken)
         self.markdownDir = markdownDir
         self.space = space
         self.parentPageId = parentPageId
-        self.kv = KeyValue(markdownDir)
+        self.kv = KeyValue(dbPath)
         self.renderer = mistune.create_markdown(
             renderer=ConfluenceRenderer(url),
             plugins=['strikethrough','footnotes','table','url']) 
