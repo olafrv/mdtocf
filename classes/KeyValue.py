@@ -1,4 +1,5 @@
 import os
+import json
 import hashlib
 import pickledb
 
@@ -13,10 +14,14 @@ class KeyValue():
         return [*self.db.getall()]
 
     def load(self, key):
-        return self.db.get(key)
+        value = self.db.get(key)
+        if value == False:
+            return { 'id' : None, 'title': '', 'sha256': '' }
+        else:
+            return json.loads(value)
 
     def save(self, key, value):
-        self.db.set(key, value)
+        self.db.set(key, json.dumps(value))
 
     def remove(self, key):
         self.db.rem(key)

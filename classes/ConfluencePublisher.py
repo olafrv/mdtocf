@@ -1,7 +1,9 @@
 import os
+import json
 import mistune
-from .KeyValue import KeyValue
-from .ConfluenceRenderer import ConfluenceRenderer
+from classes.MetadataPlugin import MetadataPlugin
+from classes.ConfluenceRenderer import ConfluenceRenderer
+from classes.KeyValue import KeyValue
 from atlassian import Confluence
 
 class ConfluencePublisher():
@@ -12,82 +14,68 @@ class ConfluencePublisher():
         self.space = space
         self.parentPageId = parentPageId
         self.kv = KeyValue(dbPath)
+        self.metadataPlugin = MetadataPlugin()
         self.renderer = mistune.create_markdown(
             renderer=ConfluenceRenderer(url),
-            plugins=['strikethrough','footnotes','table','url']) 
-        
+            plugins=['strikethrough','footnotes','table','url', self.metadataPlugin.plugin_metadata]
+        ) 
+        # Hack to allow metadata plugin to work (See mistune/block_parser.py)
+        self.renderer.block.rules.remove('thematic_break') 
+
     def __getFileContent(self, filepath):
         file = open(filepath,mode='r')
         content = file.read()
         file.close()
         return content
 
-    def __hashChanged(self, filepath):
-        hashOld = self.kv.load(filepath)
-        hashNew = self.kv.sha256(self.__getFileContent(filepath))
-        return hashOld != hashNew
-
-    def __saveHash(self, filepath):
-        hash = self.kv.sha256(self.__getFileContent(filepath))
-        self.kv.save(filepath, hash)
-        return hash
-
-    def __removeHash(self, filepath):
-        self.kv.remove(filepath)
-        return hash
-
-    def getStorageFormat(self, filepath):
-        return self.renderer(self.__getFileContent(filepath))
-
-    def __getPageTitle(self, filepath):
-        return os.path.basename(filepath) + " [" + self.kv.sha256(filepath)[-6:] + "]"
-
     def __updatePage(self, space, parentId, filepath):
-        title = self.__getPageTitle(filepath)
+        self.metadataPlugin.stack['title'] = None
+        body = self.renderer(self.__getFileContent(filepath))
+        if self.metadataPlugin.stack['title'] == None:
+            title = os.path.basename(filepath) 
+        else:
+            title = self.metadataPlugin.stack['title']
+
+        title = title + " [" + self.kv.sha256(filepath)[-6:] + "]"
+
+        print('UPD => Page Title: ' + title)
         if self.api.update_or_create(
             parent_id=parentId, 
             title=title, 
-            body=self.getStorageFormat(filepath), 
-            representation='storage'):
-            self.__saveHash(filepath)
-            return self.api.get_page_id(space, title)
+            body=body, 
+            representation='storage'
+        ):
+            id = self.api.get_page_id(space, title)
+            self.kv.save(filepath, {'id':id, 'title':title , 'sha256': self.kv.sha256(body) } )
+            return id
         else:
             return None
-
-    def delete(self):
-        for filepath in sorted(self.kv.keys()):
-            if not os.path.isfile(filepath):
-                print("DEL: " + filepath)
-                title = self.__getPageTitle(filepath)
-                pageId = self.api.get_page_id(self.space, title)
-                if pageId != None: self.api.remove_page(pageId)
-                self.__removeHash(filepath)
-
-    def publish(self):
-        self.__publishRecursive(self.space, self.parentPageId, self.markdownDir)
 
     def __publishRecursive(self, space, parentId, path):
         # Directories: */
         for f in os.scandir(path):
             if f.is_dir():
-                print(f.path)
                 self.__publishRecursive(space, parentId, f.path)
         
         # Files: _index.md
-        indexPath = path + os.sep + '_index.md'
         indexParentId = parentId
+        indexPath = path + os.sep + '_index.md'
         if os.path.isfile(indexPath):
-            print(indexPath)
-            if self.__hashChanged(indexPath):
-                indexParentId = self.__updatePage(space, parentId, indexPath)
-            else:
-                title = self.__getPageTitle(indexPath)
-                indexParentId = self.api.get_page_id(space, title)                
+            indexParentId = self.__updatePage(space, parentId, indexPath)
 
         # Files: *.md (Except _index.md)
         for f in os.scandir(path):
             if f.path.endswith(".md") and not f.path.endswith('_index.md'):
-                print(f.path)
-                if self.__hashChanged(f.path):
-                    updated = self.__updatePage(space, indexParentId, f.path)
-                    if updated == None: print("Unable to update: " + f.path)
+                self.__updatePage(space, indexParentId, f.path)
+
+    def delete(self):
+        for filepath in sorted(self.kv.keys()):
+            if not os.path.isfile(filepath):
+                metadata = self.kv.load(filepath) 
+                print('DEL => Page Id:' + metadata['id'] + ', Title: ' + metadata['title'])
+                if self.api.get_page_id(self.space, metadata['title']):
+                    self.api.remove_page(metadata['id'])
+                self.kv.remove(filepath)
+
+    def publish(self):
+        self.__publishRecursive(self.space, self.parentPageId, self.markdownDir)
