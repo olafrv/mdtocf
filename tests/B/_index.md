@@ -1,3 +1,0 @@
-# B (Index)
-
-B Index

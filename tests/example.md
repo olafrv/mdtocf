@@ -1,5 +1,5 @@
 ---
-title : Title of this page
+title : Example Page
 chapter: true
 kind: index
 ---
