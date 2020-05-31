@@ -43,3 +43,6 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
             + '<ac:parameter ac:name="collapse">false</ac:parameter>' \
             + '<ac:plain-text-body><![CDATA['+code+']]></ac:plain-text-body>' \
             + '</ac:structured-macro>\n'
+
+    def generate_autoindex(self):
+        return '<ac:structured-macro ac:name="children" />'

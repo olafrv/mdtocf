@@ -26,9 +26,10 @@ class ConfluencePublisher():
         self.forceUpdate = forceUpdate
         self.forceDelete = forceDelete
         self.skipUpdate = skipUpdate
+        self.confluenceRenderer = ConfluenceRenderer(url)
         self.metadataPlugin = MetadataPlugin()
         self.renderer = mistune.create_markdown(
-            renderer=ConfluenceRenderer(url),
+            renderer=self.confluenceRenderer,
             plugins=['strikethrough','footnotes','table','url', self.metadataPlugin.plugin_metadata]
         ) 
         # Hack to allow metadata plugin to work (See mistune/block_parser.py)
@@ -40,8 +41,13 @@ class ConfluencePublisher():
         file.close()
         return content
 
-    def __updatePage(self, space, parentId, filepath):
-        markdown = self.__getFileContent(filepath)
+    def __updatePage(self, space, parentId, filepath, autoindex=False):
+
+        if autoindex :
+            markdown = ''
+        else:
+            markdown = self.__getFileContent(filepath)
+            
         metadata = self.kv.load(filepath)
 
         currentTitle = metadata['title']
@@ -50,21 +56,31 @@ class ConfluencePublisher():
 
         # --- Render (BEGIN)
         self.metadataPlugin.stack['title'] = None
-        body = self.renderer(markdown)
+
+        if autoindex : 
+            body = self.confluenceRenderer.generate_autoindex()
+        else:
+            body = self.renderer(markdown)
+
         if self.metadataPlugin.stack['title'] == None:
             title = os.path.basename(filepath) 
         else:
             title = self.metadataPlugin.stack['title']
+
         title = title + " [" + self.kv.sha256(filepath)[-6:] + "]"
         # --- Render (END)
 
         if currentTitle and currentTitle != title:
-            print('REN => Page New Title: ' + title)
+            print('REN => Title: ' + title)
             pageId = self.api.get_page_id(space, currentTitle)
             self.api.update_page(pageId, title, body)
             
         if currentHash != hash or self.forceUpdate:
-            print('UPD => Page Title: ' + title)
+            if autoindex :
+                print('IDX => Title: ' + title)
+            else:
+                print('UPD => Title: ' + title)
+            
             if self.api.update_or_create(
                 parent_id=parentId, 
                 title=title, 
@@ -77,7 +93,7 @@ class ConfluencePublisher():
             else:
                 return None
         else:
-            print('SKP => Page Title: ' + title)
+            print('SKP => Title: ' + title)
             return self.api.get_page_id(space, title)
 
     def __publishRecursive(self, space, parentId, path):
@@ -85,7 +101,13 @@ class ConfluencePublisher():
         indexParentId = parentId
         indexPath = path + os.sep + '_index.md'
         if os.path.isfile(indexPath):
+            # Use local _index.md file
             indexParentId = self.__updatePage(space, parentId, indexPath)
+        else:
+            # Autoindex creates an _index.md page in Confluence if missing locally
+            # Except for (root) parentPageId because it is not in the markdownDir!
+            if parentId != self.parentPageId :
+                indexParentId = self.__updatePage(space, parentId, indexPath, True)
 
         # Directories: */
         for f in os.scandir(path):
@@ -99,8 +121,17 @@ class ConfluencePublisher():
 
     def delete(self):
         for filepath in sorted(self.kv.keys()):
-            if not os.path.isfile(filepath) or self.forceDelete:
-                metadata = self.kv.load(filepath) 
+            metadata = self.kv.load(filepath)
+
+            indexWithChilds = False
+            if filepath.endswith('_index.md'):
+                childs = 0
+                for f in os.scandir(os.path.dirname(filepath)):
+                    if f.path.endswith(".md") and not f.path.endswith('_index.md'):
+                        childs = childs + 1
+                indexWithChilds = childs>0
+
+            if not os.path.isfile(filepath) and not indexWithChilds or self.forceDelete:
                 print('DEL => Id: ' + metadata['id'] + ', Title: ' + metadata['title'])
                 if self.api.get_page_id(self.space, metadata['title']):
                     self.api.remove_page(metadata['id'])
