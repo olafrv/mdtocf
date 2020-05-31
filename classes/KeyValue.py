@@ -1,8 +1,14 @@
+"""Key-Value Store Used for Caching
+
+Used by ConfluencePublisher to save metadata related to the processing
+of each markdown file, like: Confluence Page ID, Confluence Page Title
+and XHTML Confluence Content SHA256.
+
+"""
 import os
 import json
 import hashlib
 import pickledb
-
 class KeyValue():
     def __init__(self, dbPath):
         self.db = pickledb.load(dbPath, False)

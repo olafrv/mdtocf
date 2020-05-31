@@ -1,3 +1,8 @@
+""" Confluence Publisher
+
+Encapsulate the logic of processing a markdown directory tree.
+
+"""
 import os
 import json
 import mistune

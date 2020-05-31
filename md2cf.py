@@ -1,3 +1,9 @@
+"""md2cf.py 
+
+This script convert markdown pages and publish them to confluence pages
+
+"""
+
 import argparse
 from classes.ConfluenceRenderer import ConfluenceRenderer
 from classes.ConfluencePublisher import ConfluencePublisher

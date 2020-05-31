@@ -1,6 +1,8 @@
 # Markdown To Confluence (md2cf)
 
-Tested on: Ubuntu 18.04 LTS w/Python 3.7
+Tested with: 
+* Ubuntu 18.04 LTS w/Python 3.7
+* Atlassian Confluence API (Cloud)
 
 ## Install and Configure
 
@@ -36,21 +38,22 @@ python md2cf.py \
 
 # References
 
-## Mistune
+## Mistune v2
 
+* https://github.com/lepture/mistune
 * https://mistune.readthedocs.io/en/latest/
 
-## Markdown
-
-* https://github.com/adam-p/markdown-here/wiki/Markdown-Here-Cheatsheet
-
-## Confluence
+## Python Confluence API Wrapper
 
 * https://pypi.org/project/atlassian-python-api/
 * https://atlassian-python-api.readthedocs.io/confluence.html
+
+## Confluence and Storage Format (Cloud API)
+
+* https://developer.atlassian.com/cloud/confluence/rest/
 * https://confluence.atlassian.com/doc/confluence-server-documentation-135922.html
 * https://confluence.atlassian.com/doc/confluence-storage-format-790796544.html
-* https://confluence.atlassian.com/confkb/how-to-get-confluence-page-id-648380445.html
 * https://confluence.atlassian.com/doc/macros-139387.html
 * https://confluence.atlassian.com/conf59/code-block-macro-792499083.html
+* https://confluence.atlassian.com/confkb/how-to-get-confluence-page-id-648380445.html
 * https://confluence.atlassian.com/doc/delete-or-restore-a-page-139429.html
