@@ -9,14 +9,15 @@ class MetadataPlugin():
     stack = { 'title' : None } # Used by ConfluenceRenderer to get and set the Page Title
 
     METADATA_PATTERN = (
-        #---
-        #title : Title of the Page (Markdown file)
-        #---
-        r'---\s*\ntitle\s*:([\s\S]+)\n---' 
+        r'---\s*\n'             #---
+        r'title[ ]*:([ \S]+)\n' #title : Title of the Page (Markdown file)
+        r'([\s\S]*)'            #chapter : True
+        r'---'                  #---
     )
 
     def parse_metadata(self, parser, match, state):
         title = match.group(1).strip()
+        # print(match.group(2).strip())
         self.stack['title'] = title
         return 'metadata', title
 

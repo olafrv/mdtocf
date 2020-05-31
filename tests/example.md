@@ -1,5 +1,7 @@
 ---
 title : Title of this page
+chapter: true
+kind: index
 ---
 
 # h1 Heading

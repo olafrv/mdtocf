@@ -13,9 +13,6 @@ class KeyValue():
     def __init__(self, dbPath):
         self.db = pickledb.load(dbPath, False)
 
-    def __del__(self):
-        self.db.dump()
-
     def keys(self):
         return [*self.db.getall()]
 
@@ -28,10 +25,12 @@ class KeyValue():
 
     def save(self, key, value):
         self.db.set(key, json.dumps(value))
+        self.db.dump()
 
     def remove(self, key):
         self.db.rem(key)
-
+        self.db.dump()
+        
     def sha256(self, value):
         h = hashlib.sha256(value.encode())
         return h.hexdigest()
