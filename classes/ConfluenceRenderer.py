@@ -41,5 +41,5 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
             + '<ac:parameter ac:name="language">'+(info.strip() if info!=None else '')+'</ac:parameter>' \
             + '<ac:parameter ac:name="firstline">0001</ac:parameter>' \
             + '<ac:parameter ac:name="collapse">false</ac:parameter>' \
-            + '<ac:plain-text-body><![CDATA['+mistune.escape(code)+']]></ac:plain-text-body>' \
+            + '<ac:plain-text-body><![CDATA['+code+']]></ac:plain-text-body>' \
             + '</ac:structured-macro>\n'
