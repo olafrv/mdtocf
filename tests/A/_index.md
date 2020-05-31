@@ -1,7 +1,7 @@
 ---
-title: Folder A (Index)
+title: Folder A
 ---
 
-# A (Index)
+# A
 
-A (Index)
+A

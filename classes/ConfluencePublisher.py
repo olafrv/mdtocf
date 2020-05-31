@@ -63,7 +63,10 @@ class ConfluencePublisher():
             body = self.renderer(markdown)
 
         if self.metadataPlugin.stack['title'] == None:
-            title = os.path.basename(filepath) 
+            if autoindex :
+                title = 'Folder ' + os.path.basename(os.path.dirname(filepath))
+            else:
+                title = os.path.basename(filepath) 
         else:
             title = self.metadataPlugin.stack['title']
 
