@@ -15,13 +15,28 @@ pip install atlassian-python-api
 ```
 
 ## Push MD to Confluence 
+
+Help:
 ```
 python md2cf.py -h
 ```
 
+Example:
+```
+python md2cf.py \
+    --confluenceUsername "olafrv@gmail.com" \
+    --confluenceApiToken "****************"   \
+    --confluenceUrl "https://olafrv.atlassian.net"   \
+    --confluenceSpace "TEST" \
+    --confluenceParentPageId "33114" \
+    --confluencePageTitleSuffix "[Test]" \
+    --markdownDir ./tests \
+    --db ./dbs/tests.db
+```
+
 # References
 
-# Mistune
+## Mistune
 
 * https://mistune.readthedocs.io/en/latest/
 
