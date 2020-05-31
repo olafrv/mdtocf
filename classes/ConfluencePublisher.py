@@ -42,9 +42,11 @@ class ConfluencePublisher():
 
     def __updatePage(self, space, parentId, filepath):
         markdown = self.__getFileContent(filepath)
+        metadata = self.kv.load(filepath)
 
-        hashOld = self.kv.load(filepath)['sha256'] 
-        hashNew = self.kv.sha256(markdown)
+        currentTitle = metadata['title']
+        currentHash = metadata['sha256'] 
+        hash = self.kv.sha256(markdown)
 
         # --- Render (BEGIN)
         self.metadataPlugin.stack['title'] = None
@@ -53,11 +55,15 @@ class ConfluencePublisher():
             title = os.path.basename(filepath) 
         else:
             title = self.metadataPlugin.stack['title']
+        title = title + " [" + self.kv.sha256(filepath)[-6:] + "]"
         # --- Render (END)
 
-        title = title + " [" + self.kv.sha256(filepath)[-6:] + "]"
-
-        if hashOld != hashNew or self.forceUpdate:
+        if currentTitle and currentTitle != title:
+            print('REN => Page New Title: ' + title)
+            pageId = self.api.get_page_id(space, currentTitle)
+            self.api.update_page(pageId, title, body)
+            
+        if currentHash != hash or self.forceUpdate:
             print('UPD => Page Title: ' + title)
             if self.api.update_or_create(
                 parent_id=parentId, 
@@ -66,7 +72,7 @@ class ConfluencePublisher():
                 representation='storage'
             ):
                 id = self.api.get_page_id(space, title)
-                self.kv.save(filepath, {'id': id, 'title': title , 'sha256': hashNew } )
+                self.kv.save(filepath, {'id': id, 'title': title , 'sha256': hash } )
                 return id
             else:
                 return None
