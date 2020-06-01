@@ -47,5 +47,5 @@ jobs:
           --confluenceParentPageId "33114" \
           --confluencePageTitlePrefix "[Test] " \
           --markdownDir ./tests \
-          --dbPath ./dbs/tests.db \
+          --dbPath ./tests.db \
           --forceDelete 1
