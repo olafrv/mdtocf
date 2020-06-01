@@ -1,8 +1,13 @@
 # Markdown To Confluence (md2cf)
 
-Tested with: 
+## Requirements 
+
 * Ubuntu 18.04 LTS + Python 3.7.5
 * Atlassian Confluence API (Cloud)
+
+## Missing Features (Todo)
+
+* Attachments (e.g. images, pdf, etc.)
 
 ## Install and Configure
 
@@ -34,6 +39,25 @@ python md2cf.py \
     --confluencePageTitleSuffix "[Test]" \
     --markdownDir ./tests \
     --db ./dbs/tests.db
+```
+
+Output:
+```
+UPD => Title: [Test] Folder A
+Can't find '[Test] Folder A' page on the https://olafrv.atlassian.net/wiki!
+IDX => Title: [Test] Folder B
+Can't find '[Test] Folder B' page on the https://olafrv.atlassian.net/wiki!
+UPD => Title: [Test] 1
+Can't find '[Test] 1' page on the https://olafrv.atlassian.net/wiki!
+UPD => Title: [Test] Page AA
+Can't find '[Test] Page AA' page on the https://olafrv.atlassian.net/wiki!
+UPD => Title: [Test] Example Page
+Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
+```
+
+Result in Confluence:
+```
+
 ```
 
 ## About Markdown Compatibility
