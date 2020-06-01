@@ -1,6 +1,6 @@
 __pycache__
-venv/
-virtualenv/
+venv
+dbs
 *.db
-*.sh
+*-*.sh
 *.swp

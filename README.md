@@ -14,25 +14,27 @@ Please see **requirements.txt** for specific python (pip) packages/modules.
 
 * Attachments (e.g. images, pdf, etc.)
 
-## Install and Configure
+## Build (Local)
 
 ```
-sudo apt install virtualenv
-sudo apt install python3.7
+apt install -y virtualenv python3.7 python-pip
 git clone https://github.com/olafrv/md2cf.git --branch 1.0.0-rc1 --single-branch
 cd md2cf
 virtualenv --python=python3.7 venv
-source venv/bin/activate
+chmod +x venv/bin/activate
+. venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
+chmod +x run.sh
+```
+
+## Building (Docker)
+
+```
+docker build -t md2cf .
 ```
 
 ## Push MD to Confluence 
-
-Help:
-```
-source venv/bin/activate
-python md2cf.py -h
-```
 
 Markdown directory tree (example):
 ```
@@ -47,16 +49,31 @@ find tests/
 ./tests/example.md
 ```
 
-Run:
+Run locally:
 ```
-source venv/bin/activate
-python md2cf.py \
+./run.sh \
     --confluenceUsername "olafrv@gmail.com" \
-    --confluenceApiToken "****************"   \
+    --confluenceApiToken "****************" \
+    --confluenceUrl "https://olafrv.atlassian.net" \
+    --confluenceSpace "TEST" \
+    --confluenceParentPageId "33114" \
+    --confluencePageTitlePrefix "[Test]" \
+    --markdownDir ./tests \
+    --db ./dbs/tests.db
+```
+
+Run on Docker:
+```
+docker run --rm -it  \
+    --mount type=bind,source="$(pwd)"/tests,target=/md2cf/tests \
+    --mount type=bind,source="$(pwd)"/dbs,target=/md2cf/dbs \
+    md2cf \
+    --confluenceUsername "olafrv@gmail.com" \
+    --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
-    --confluencePageTitleSuffix "[Test]" \
+    --confluencePageTitlePrefix "[Test]" \
     --markdownDir ./tests \
     --db ./dbs/tests.db
 ```
