@@ -19,6 +19,8 @@ Please see **requirements.txt** for specific python (pip) packages/modules.
 ```
 sudo apt install virtualenv
 sudo apt install python3.7
+git clone https://github.com/olafrv/md2cf.git --branch 1.0.0-rc1 --single-branch
+cd md2cf
 virtualenv --python=python3.7 venv
 source venv/bin/activate
 pip install -r requirements.txt
