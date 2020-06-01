@@ -2,8 +2,11 @@
 
 ## Requirements 
 
-* [Ubuntu 18.04 LTS](https://releases.ubuntu.com/) + [Python 3.7.5](https://docs.python.org/3/)
-* [Atlassian Confluence API (Cloud)](https://developer.atlassian.com/cloud/confluence/rest/)
+* [Ubuntu 18.04 LTS](https://releases.ubuntu.com/)
+* [Python 3.7.5](https://docs.python.org/3/) and several python modules:
+  * [PickelDB](https://pythonhosted.org/pickleDB/)
+  * [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
+  * [Atlassian Confluence API (Cloud)](https://developer.atlassian.com/cloud/confluence/rest/)
 
 ## Missing Features (Todo)
 
@@ -16,9 +19,7 @@ sudo apt install virtualenv
 sudo apt install python3.7
 virtualenv --python=python3.7 venv
 source venv/bin/activate
-pip install pygments
-pip install mistune==2.0.0a4
-pip install atlassian-python-api
+pip install -r requirements.txt
 ```
 
 ## Push MD to Confluence 
