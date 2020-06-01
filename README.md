@@ -54,7 +54,7 @@ find tests/
     --confluenceUrl "https://olafrv.atlassian.net" \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
-    --confluencePageTitlePrefix "[Test]" \
+    --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./tests \
     --db ./dbs/tests.db
 ```
@@ -72,7 +72,7 @@ docker run --rm -it \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
-    --confluencePageTitlePrefix "[Test]" \
+    --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./tests \
     --db ./dbs/tests.db
 ```
@@ -89,7 +89,7 @@ docker run --rm -it \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
-    --confluencePageTitlePrefix "[Test]" \
+    --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./tests \
     --db ./dbs/tests.db
 ```
