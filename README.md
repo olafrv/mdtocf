@@ -43,8 +43,9 @@ python md2cf.py \
 * https://github.com/lepture/mistune
 * https://mistune.readthedocs.io/en/latest/
 
-## Python Confluence API Wrapper
+## Python v3
 
+* https://docs.python.org/3/howto/regex.html
 * https://pypi.org/project/atlassian-python-api/
 * https://atlassian-python-api.readthedocs.io/confluence.html
 
