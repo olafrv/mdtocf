@@ -59,7 +59,7 @@ Can't find '[Test] Page AA' page on the https://olafrv.atlassian.net/wiki!
 UPD => Title: [Test] Example Page
 Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 ```
-The *Can't find...* means *'not found but creating...'* (Python Confluence API).
+The *"Can't find..."* means *"not found but creating..."* (Python Confluence API).
 
 ## Results in Confluence
 
