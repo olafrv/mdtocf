@@ -143,7 +143,7 @@ class ConfluencePublisher():
 
             if not os.path.isfile(filepath) and \
                not indexWithChilds or self.forceDelete:
-                print('DEL => Id: ' 
+                print('DEL => Id: '
                       + metadata['id'] + ', Title: ' + metadata['title'])
                 if self.api.get_page_by_id(metadata['id']):
                     self.api.remove_page(metadata['id'])
