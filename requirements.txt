@@ -11,7 +11,6 @@ mccabe==0.6.1
 mistune==2.0.0a4
 oauthlib==3.1.0
 pickleDB==0.9.2
-pkg-resources==0.0.0
 pycodestyle==2.6.0
 pyflakes==2.2.0
 Pygments==2.6.1
