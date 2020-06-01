@@ -45,7 +45,7 @@ find tests/
 ./tests/example.md
 ```
 
-Example:
+Run:
 ```
 source venv/bin/activate
 python md2cf.py \
