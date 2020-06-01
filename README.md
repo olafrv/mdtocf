@@ -1,12 +1,14 @@
 # Markdown To Confluence (md2cf)
 
-## Requirements 
+## Requirements (Tested)
 
 * [Ubuntu 18.04 LTS](https://releases.ubuntu.com/)
-* [Python 3.7.5](https://docs.python.org/3/) and several python modules:
-  * [PickelDB](https://pythonhosted.org/pickleDB/)
-  * [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
-  * [Atlassian Confluence API (Cloud)](https://developer.atlassian.com/cloud/confluence/rest/)
+* [Python 3.7.5](https://docs.python.org/3/) and several python libraries:
+  * [PickelDB v0.9](https://pythonhosted.org/pickleDB/)
+  * [Mistune v2.0 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
+  * [Atlassian Python API v1.5](https://atlassian-python-api.readthedocs.io/)
+
+  Please see **requirements.txt** for specific python (pip) packages/modules.
 
 ## Missing Features (Todo)
 
