@@ -36,7 +36,31 @@ python md2cf.py \
     --db ./dbs/tests.db
 ```
 
+## About Markdown Compatibility
+
+This scripts depends on [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
+compatible with [CommonMark](https://spec.commonmark.org)
+
+The (optional) metadata heading in markdown (.md) files likes this from [Hugo](https://gohugo.io/getting-started/quick-start/):
+```yaml
+title: My Page Title
+date: 2019-03-26T08:47:11+01:00
+draft: true
+chapter: true
+kind: index
+```
+It is parsed and partially used by this script to organize the content in
+Attlasian Confluence. See (../blob/master/classes/MetadataPlugin.py).
+
+**It is not part of (Common)Markdown standard**, it is just a popular way of specify in YAML 
+markdown metadata usable for external tools.
+
 # References
+
+## Markdown
+
+* https://spec.commonmark.org
+* https://spec.commonmark.org/dingus/
 
 ## Mistune v2
 
