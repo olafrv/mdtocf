@@ -41,7 +41,7 @@ python md2cf.py \
 This scripts depends on [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
 compatible with [CommonMark](https://spec.commonmark.org)
 
-The (optional) metadata heading in markdown (.md) files likes the one which follows bellow from [Hugo](https://gohugo.io/getting-started/quick-start/), it is not part of (Common)Markdown standard, by the contrary it is just a popular way of specify in YAML markdown metadata usable for external tools.
+The (optional) metadata heading in markdown (.md) files likes the one which follows below used by [Hugo](https://gohugo.io/getting-started/quick-start/), it is not part of CommonMarkdown standard, but just a popular way of specify in YAML markdown metadata usable for external tools.
 ```yaml
 title: My Page Title
 date: 2019-03-26T08:47:11+01:00
