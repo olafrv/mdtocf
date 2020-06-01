@@ -28,11 +28,13 @@ pip install -r requirements.txt
 
 Help:
 ```
+source venv/bin/activate
 python md2cf.py -h
 ```
 
 Example:
 ```
+source venv/bin/activate
 python md2cf.py \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************"   \
