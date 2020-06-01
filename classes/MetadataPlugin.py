@@ -11,7 +11,7 @@ class MetadataPlugin():
     METADATA_PATTERN = (
         r'---\s*\n'             #---
         r'title[ ]*:([ \S]+)\n' #title : Title of the Page (Markdown file)
-        r'([\s\S]*)'            #chapter : True
+        r'[\s\S]*'              #chapter : True
         r'---'                  #---
     )
 
