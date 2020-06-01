@@ -33,7 +33,8 @@ class ConfluencePublisher():
             renderer=self.confluenceRenderer,
             plugins=['strikethrough', 'footnotes', 'table', 'url',
                      self.metadataPlugin.plugin_metadata]
-        ) 
+        )
+
         # Hack to allow metadata plugin to work (See mistune/block_parser.py)
         self.renderer.block.rules.remove('thematic_break')
 
@@ -53,13 +54,13 @@ class ConfluencePublisher():
         metadata = self.kv.load(filepath)
 
         currentTitle = metadata['title']
-        currentHash = metadata['sha256'] 
+        currentHash = metadata['sha256']
         hash = self.kv.sha256(markdown)
 
         # --- Render (BEGIN)
         self.metadataPlugin.stack['title'] = None
 
-        if autoindex: 
+        if autoindex:
             body = self.confluenceRenderer.generate_autoindex()
         else:
             body = self.renderer(markdown)
@@ -68,18 +69,19 @@ class ConfluencePublisher():
             if autoindex:
                 title = 'Folder ' + os.path.basename(os.path.dirname(filepath))
             else:
-                title = os.path.basename(filepath) 
+                title = os.path.basename(filepath)
         else:
             title = self.metadataPlugin.stack['title']
 
-        title = self.pageTitlePrefix + title  # + " [" + self.kv.sha256(filepath)[-6:] + "]"
+        title = self.pageTitlePrefix + title
+        # >>> Removed: + " [" + self.kv.sha256(filepath)[-6:] + "]"
         # --- Render (END)
 
         if currentTitle and currentTitle != title:
             print('REN => Title: ' + title)
             pageId = self.api.get_page_id(space, currentTitle)
             self.api.update_page(pageId, title, body)
-            
+
         if currentHash != hash or self.forceUpdate:
             if autoindex:
                 print('IDX => Title: ' + title)
@@ -141,7 +143,8 @@ class ConfluencePublisher():
 
             if not os.path.isfile(filepath) and \
                not indexWithChilds or self.forceDelete:
-                print('DEL => Id: ' + metadata['id'] + ', Title: ' + metadata['title'])
+                print('DEL => Id: ' 
+                      + metadata['id'] + ', Title: ' + metadata['title'])
                 if self.api.get_page_by_id(metadata['id']):
                     self.api.remove_page(metadata['id'])
                 self.kv.remove(filepath)

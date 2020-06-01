@@ -17,7 +17,8 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
     def image(self, src, alt="", title=None):
         if src.find('/') == -1:
             # Attached Image
-            return '<ac:image>' + '<ri:attachment ri:filename="' + src + '" />' + '</ac:image>'
+            return '<ac:image>' + '<ri:attachment ri:filename="' \
+                   + src + '" />' + '</ac:image>'
         else:
             # External Image
             return '<ac:image><ri:url ri:value="' + src + '" /></ac:image>'
