@@ -32,6 +32,19 @@ source venv/bin/activate
 python md2cf.py -h
 ```
 
+Markdown directory tree (example):
+```
+find tests/
+./tests
+./tests/A
+./tests/A/aa.md
+./tests/A/_index.md
+./tests/A/B
+./tests/A/B/bb.md
+./tests/example.png
+./tests/example.md
+```
+
 Example:
 ```
 source venv/bin/activate
