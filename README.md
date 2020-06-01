@@ -1,7 +1,7 @@
 # Markdown To Confluence (md2cf)
 
 Tested with: 
-* Ubuntu 18.04 LTS w/Python 3.7
+* Ubuntu 18.04 LTS + Python 3.7.5
 * Atlassian Confluence API (Cloud)
 
 ## Install and Configure
