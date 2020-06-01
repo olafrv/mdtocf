@@ -1,7 +1,11 @@
 ---
-title : Example Page
+
+
+title :Example Page
+
 chapter: true
 kind: index
+
 ---
 
 # h1 Heading

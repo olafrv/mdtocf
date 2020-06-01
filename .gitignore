@@ -3,3 +3,4 @@ venv/
 virtualenv/
 *.db
 *.sh
+*.swp
