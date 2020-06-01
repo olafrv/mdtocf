@@ -8,7 +8,7 @@
   * [Mistune v2.0 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
   * [Atlassian Python API v1.5](https://atlassian-python-api.readthedocs.io/)
 
-  Please see **requirements.txt** for specific python (pip) packages/modules.
+Please see **requirements.txt** for specific python (pip) packages/modules.
 
 ## Missing Features (Todo)
 
