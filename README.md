@@ -55,10 +55,11 @@ UPD => Title: [Test] Example Page
 Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 ```
 
-Result in Confluence:
-```
+## Results in Confluence
 
-```
+Rendering and publishing **./tests** produce this final results:
+
+![Result in Confluence](https://raw.githubusercontent.com/olafrv/md2cf/master/tests/example.png)
 
 ## About Markdown Compatibility
 
