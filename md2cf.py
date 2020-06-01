@@ -1,12 +1,11 @@
-"""md2cf.py 
+"""md2cf.py
 
 This script convert markdown pages and publish them to confluence pages
 
 """
-
 import argparse
-from classes.ConfluenceRenderer import ConfluenceRenderer
 from classes.ConfluencePublisher import ConfluencePublisher
+
 
 def main():
     parser = argparse.ArgumentParser()
@@ -23,9 +22,9 @@ def main():
     parser.add_argument('--skipUpdate', required=False, default=0, help='1|0, default=0 (No). Skip page update in Confluence')
     args = parser.parse_args()
 
-    forceUpdate = int(args.forceUpdate)==1
-    forceDelete = int(args.forceDelete)==1
-    skipUpdate = int(args.skipUpdate)==1
+    forceUpdate = int(args.forceUpdate) == 1
+    forceDelete = int(args.forceDelete) == 1
+    skipUpdate = int(args.skipUpdate) == 1
 
     confluencePublisher = ConfluencePublisher(
         url=args.confluenceUrl,
@@ -42,7 +41,9 @@ def main():
     )
 
     confluencePublisher.delete()
-    if (not skipUpdate) : confluencePublisher.publish()
+    if not skipUpdate:
+        confluencePublisher.publish()
+
 
 if __name__ == "__main__":
-   main()
+    main()

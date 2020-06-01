@@ -4,19 +4,19 @@ Encapsulate the logic of processing a markdown directory tree.
 
 """
 import os
-import json
 import mistune
 from classes.MetadataPlugin import MetadataPlugin
 from classes.ConfluenceRenderer import ConfluenceRenderer
 from classes.KeyValue import KeyValue
 from atlassian import Confluence
 
+
 class ConfluencePublisher():
 
     def __init__(
-        self, url, username, apiToken, 
-        pageTitlePrefix, markdownDir, dbPath, space, parentPageId, 
-        forceUpdate=False, forceDelete=False, skipUpdate=False, 
+        self, url, username, apiToken,
+        pageTitlePrefix, markdownDir, dbPath, space, parentPageId,
+        forceUpdate=False, forceDelete=False, skipUpdate=False,
     ):
         self.api = Confluence(url=url, username=username, password=apiToken)
         self.pageTitlePrefix = pageTitlePrefix
@@ -31,24 +31,25 @@ class ConfluencePublisher():
         self.metadataPlugin = MetadataPlugin()
         self.renderer = mistune.create_markdown(
             renderer=self.confluenceRenderer,
-            plugins=['strikethrough','footnotes','table','url', self.metadataPlugin.plugin_metadata]
+            plugins=['strikethrough', 'footnotes', 'table', 'url',
+                     self.metadataPlugin.plugin_metadata]
         ) 
         # Hack to allow metadata plugin to work (See mistune/block_parser.py)
-        self.renderer.block.rules.remove('thematic_break') 
+        self.renderer.block.rules.remove('thematic_break')
 
     def __getFileContent(self, filepath):
-        file = open(filepath,mode='r')
+        file = open(filepath, mode='r')
         content = file.read()
         file.close()
         return content
 
     def __updatePage(self, space, parentId, filepath, autoindex=False):
 
-        if autoindex :
+        if autoindex:
             markdown = ''
         else:
             markdown = self.__getFileContent(filepath)
-            
+
         metadata = self.kv.load(filepath)
 
         currentTitle = metadata['title']
@@ -58,13 +59,13 @@ class ConfluencePublisher():
         # --- Render (BEGIN)
         self.metadataPlugin.stack['title'] = None
 
-        if autoindex : 
+        if autoindex: 
             body = self.confluenceRenderer.generate_autoindex()
         else:
             body = self.renderer(markdown)
 
-        if self.metadataPlugin.stack['title'] == None:
-            if autoindex :
+        if self.metadataPlugin.stack['title'] is None:
+            if autoindex:
                 title = 'Folder ' + os.path.basename(os.path.dirname(filepath))
             else:
                 title = os.path.basename(filepath) 
@@ -80,19 +81,20 @@ class ConfluencePublisher():
             self.api.update_page(pageId, title, body)
             
         if currentHash != hash or self.forceUpdate:
-            if autoindex :
+            if autoindex:
                 print('IDX => Title: ' + title)
             else:
                 print('UPD => Title: ' + title)
-            
+
             if self.api.update_or_create(
-                parent_id=parentId, 
-                title=title, 
-                body=body, 
+                parent_id=parentId,
+                title=title,
+                body=body,
                 representation='storage'
             ):
                 id = self.api.get_page_id(space, title)
-                self.kv.save(filepath, {'id': id, 'title': title , 'sha256': hash } )
+                self.kv.save(filepath,
+                             {'id': id, 'title': title, 'sha256': hash})
                 return id
             else:
                 return None
@@ -108,10 +110,11 @@ class ConfluencePublisher():
             # Use local _index.md file
             indexParentId = self.__updatePage(space, parentId, indexPath)
         else:
-            # Autoindex creates an _index.md page in Confluence if missing locally
-            # Except for (root) parentPageId because it is not in the markdownDir!
-            if parentId != self.parentPageId :
-                indexParentId = self.__updatePage(space, parentId, indexPath, True)
+            # Autoindex simulate _index.md in Confluence if missing locally
+            # Except for (root) parentPageId because missing in markdownDir!
+            if parentId != self.parentPageId:
+                indexParentId = self.__updatePage(
+                    space, parentId, indexPath, True)
 
         # Directories: */
         for f in os.scandir(path):
@@ -131,15 +134,18 @@ class ConfluencePublisher():
             if filepath.endswith('_index.md'):
                 childs = 0
                 for f in os.scandir(os.path.dirname(filepath)):
-                    if f.path.endswith(".md") and not f.path.endswith('_index.md'):
+                    if f.path.endswith(".md") and \
+                       not f.path.endswith('_index.md'):
                         childs = childs + 1
-                indexWithChilds = childs>0
+                indexWithChilds = childs > 0
 
-            if not os.path.isfile(filepath) and not indexWithChilds or self.forceDelete:
+            if not os.path.isfile(filepath) and \
+               not indexWithChilds or self.forceDelete:
                 print('DEL => Id: ' + metadata['id'] + ', Title: ' + metadata['title'])
                 if self.api.get_page_by_id(metadata['id']):
                     self.api.remove_page(metadata['id'])
                 self.kv.remove(filepath)
 
     def publish(self):
-        self.__publishRecursive(self.space, self.parentPageId, self.markdownDir)
+        self.__publishRecursive(
+            self.space, self.parentPageId, self.markdownDir)

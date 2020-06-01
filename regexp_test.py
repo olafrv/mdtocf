@@ -1,8 +1,9 @@
-import re
 from classes.MetadataPlugin import MetadataPlugin
 
+
 def main():
-    file = open('./tests/example.md',mode='r')
+
+    file = open('./tests/example.md', mode='r')
     content = file.read()
     file.close()
 
@@ -17,6 +18,6 @@ def main():
     else:
         print('No match')
 
-if __name__ == "__main__":
-   main()
 
+if __name__ == "__main__":
+    main()
