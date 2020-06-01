@@ -1,1 +1,3 @@
-__all__ = ["ConfluencePublisher", "ConfluenceRenderer", "KeyValue", "MetadataPlugin"]
+__all__ = [
+    "ConfluencePublisher", "ConfluenceRenderer", "KeyValue", "MetadataPlugin"
+]
