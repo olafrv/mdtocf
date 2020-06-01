@@ -50,7 +50,7 @@ chapter: true
 kind: index
 ```
 It is parsed and partially used by this script to organize the content in
-Attlasian Confluence. See (../blob/master/classes/MetadataPlugin.py).
+Attlasian Confluence. A test for this is available in **regexp_test.py**).
 
 **It is not part of (Common)Markdown standard**, it is just a popular way of specify in YAML 
 markdown metadata usable for external tools.
