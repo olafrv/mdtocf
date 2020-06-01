@@ -14,7 +14,9 @@ Please see **requirements.txt** for specific python (pip) packages/modules.
 
 * Attachments (e.g. images, pdf, etc.)
 
-## Build (Local)
+# Install, Configure and Run
+
+## Install Runtime Environment
 
 ```
 apt install -y virtualenv python3.7 python-pip
@@ -28,13 +30,7 @@ pip install -r requirements.txt
 chmod +x run.sh
 ```
 
-## Building (Docker)
-
-```
-docker build -t md2cf .
-```
-
-## Push MD to Confluence 
+## Publish to Confluence 
 
 Markdown directory tree (example):
 ```
@@ -49,7 +45,8 @@ find tests/
 ./tests/example.md
 ```
 
-Run locally:
+### Option A. Run Locally
+
 ```
 ./run.sh \
     --confluenceUsername "olafrv@gmail.com" \
@@ -62,9 +59,11 @@ Run locally:
     --db ./dbs/tests.db
 ```
 
-Run on Docker:
+### Option B. Run on Docker image built locally
+
 ```
-docker run --rm -it  \
+docker build -t md2cf .
+docker run --rm -it \
     --mount type=bind,source="$(pwd)"/tests,target=/md2cf/tests \
     --mount type=bind,source="$(pwd)"/dbs,target=/md2cf/dbs \
     md2cf \
@@ -77,6 +76,25 @@ docker run --rm -it  \
     --markdownDir ./tests \
     --db ./dbs/tests.db
 ```
+
+### Option C. Run on Docker image downloaded from Github's Packages
+
+```
+docker run --rm -it \
+    --mount type=bind,source="$(pwd)"/tests,target=/md2cf/tests \
+    --mount type=bind,source="$(pwd)"/dbs,target=/md2cf/dbs \
+    docker.pkg.github.com/olafrv/md2cf/md2cf:1.0.0-rc1
+    --confluenceUsername "olafrv@gmail.com" \
+    --confluenceApiToken "****************" \
+    --confluenceUrl "https://olafrv.atlassian.net"   \
+    --confluenceSpace "TEST" \
+    --confluenceParentPageId "33114" \
+    --confluencePageTitlePrefix "[Test]" \
+    --markdownDir ./tests \
+    --db ./dbs/tests.db
+```
+
+## Output and Results
 
 Output:
 ```
