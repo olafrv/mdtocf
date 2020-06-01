@@ -57,7 +57,7 @@ Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 
 ## Results in Confluence
 
-Rendering and publishing **./tests** produce this final results:
+Rendering and publishing **./tests** produce the following final result in Confluence:
 
 ![Result in Confluence](https://raw.githubusercontent.com/olafrv/md2cf/master/tests/example.png)
 
