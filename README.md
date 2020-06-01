@@ -2,8 +2,8 @@
 
 ## Requirements 
 
-* Ubuntu 18.04 LTS + Python 3.7.5
-* Atlassian Confluence API (Cloud)
+* [Ubuntu 18.04 LTS](https://releases.ubuntu.com/) + [Python 3.7.5](https://docs.python.org/3/)
+* [Atlassian Confluence API (Cloud)](https://developer.atlassian.com/cloud/confluence/rest/)
 
 ## Missing Features (Todo)
 
@@ -91,6 +91,7 @@ Attlasian Confluence. A test for this is available in **regexp_test.py**).
 
 ## Python v3
 
+* https://docs.python.org/3/
 * https://docs.python.org/3/howto/regex.html
 * https://pypi.org/project/atlassian-python-api/
 * https://atlassian-python-api.readthedocs.io/confluence.html
