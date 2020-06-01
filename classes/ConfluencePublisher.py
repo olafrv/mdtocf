@@ -15,10 +15,11 @@ class ConfluencePublisher():
 
     def __init__(
         self, url, username, apiToken, 
-        markdownDir, dbPath, space, parentPageId, 
+        pageTitlePrefix, markdownDir, dbPath, space, parentPageId, 
         forceUpdate=False, forceDelete=False, skipUpdate=False, 
     ):
         self.api = Confluence(url=url, username=username, password=apiToken)
+        self.pageTitlePrefix = pageTitlePrefix
         self.markdownDir = markdownDir
         self.kv = KeyValue(dbPath)
         self.space = space
@@ -70,7 +71,7 @@ class ConfluencePublisher():
         else:
             title = self.metadataPlugin.stack['title']
 
-        title = title + " [" + self.kv.sha256(filepath)[-6:] + "]"
+        title = self.pageTitlePrefix + title  # + " [" + self.kv.sha256(filepath)[-6:] + "]"
         # --- Render (END)
 
         if currentTitle and currentTitle != title:
