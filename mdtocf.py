@@ -1,4 +1,4 @@
-"""md2cf.py
+"""mdtocf.py
 
 This script convert markdown pages and publish them to confluence pages
 

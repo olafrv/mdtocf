@@ -39,7 +39,7 @@ jobs:
         CONFLUENCEUSERNAME: ${{ secrets.CONFLUENCEUSERNAME }}
         CONFLUENCEAPITOKEN: ${{ secrets.CONFLUENCEAPITOKEN }}
       run: |
-        python md2cf.py \
+        python mdtocf.py \
           --confluenceUsername "$CONFLUENCEUSERNAME" \
           --confluenceApiToken "$CONFLUENCEAPITOKEN" \
           --confluenceUrl "https://olafrv.atlassian.net"   \

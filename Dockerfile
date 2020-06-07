@@ -1,5 +1,5 @@
-# docker build -t md2cf .
-# docker run --rm -it md2cf -h
+# docker build -t mdtocf .
+# docker run --rm -it mdtocf -h
 
 FROM ubuntu:18.04 AS stage1
 RUN apt update \
@@ -8,7 +8,7 @@ RUN apt update \
 
 FROM stage1 as stage2
 COPY requirements.txt /tmp/ 
-WORKDIR /md2cf
+WORKDIR /mdtocf
 RUN virtualenv --python=python3.7 venv \
     && chmod +x venv/bin/activate \
     && . venv/bin/activate \
@@ -16,9 +16,9 @@ RUN virtualenv --python=python3.7 venv \
     && pip install -r /tmp/requirements.txt
 
 FROM stage2
-COPY . /md2cf
-WORKDIR /md2cf
+COPY . /mdtocf
+WORKDIR /mdtocf
 RUN chmod +x run.sh
 
-ENTRYPOINT [ "/md2cf/run.sh" ]
+ENTRYPOINT [ "/mdtocf/run.sh" ]
 CMD [ "-c" ]

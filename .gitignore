@@ -1,6 +1,12 @@
+# Python Cache
 __pycache__
+# Virtual Environment
 venv
+# Test
 dbs
 *.db
-*-*.sh
 *.swp
+# PyPI
+build
+dist
+*.egg-info

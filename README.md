@@ -1,6 +1,8 @@
-# Markdown To Confluence (md2cf)
+# Markdown To Confluence (mdtocf)
 
-## Requirements (Tested)
+## Requirements
+
+This solutions has been tested and designed for:
 
 * [Ubuntu 18.04 LTS](https://releases.ubuntu.com/)
 * [Python 3.7.5](https://docs.python.org/3/) and several python libraries:
@@ -8,20 +10,39 @@
   * [Mistune v2.0 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
   * [Atlassian Python API v1.5](https://atlassian-python-api.readthedocs.io/)
 
-Please see **requirements.txt** for specific python (pip) packages/modules.
+Please see [requirements.txt](https://github.com/olafrv/mdtocf/blob/master/requirements.txt)
+for specific python packages/modules versions required.
 
 ## Missing Features (Todo)
 
 * Attachments (e.g. images, pdf, etc.)
 
-# Install, Configure and Run
+# Usage
 
-## Install Runtime Environment
+## Setup python virtual environment
+
+Commands vary depending on the repository and usage options:
+
+* PyPI (Only for Option A below).
+* Github (Only for Options B, C and D below).
+
+### Using PyPI Package
 
 ```
 apt install -y virtualenv python3.7 python-pip
-git clone https://github.com/olafrv/md2cf.git --branch 1.0.0-rc1 --single-branch
-cd md2cf
+virtualenv --python=python3.7 venv
+chmod +x venv/bin/activate
+. venv/bin/activate
+python -m pip install --upgrade pip
+pip install mdtocf
+```
+
+### Using Github Repository
+
+```shell
+apt install -y virtualenv python3.7 python-pip
+git clone "https://github.com/olafrv/mdtocf.git" --branch 1.0.0-rc1 --single-branch
+cd mdtocf
 virtualenv --python=python3.7 venv
 chmod +x venv/bin/activate
 . venv/bin/activate
@@ -30,10 +51,11 @@ pip install -r requirements.txt
 chmod +x run.sh
 ```
 
-## Publish to Confluence 
+## Source markdown and database directores
 
-Markdown directory tree (example):
-```
+An [example markdown directory](https://github.com/olafrv/mdtocf) is shown here:
+
+```shell
 find tests/
 ./tests
 ./tests/A
@@ -45,9 +67,50 @@ find tests/
 ./tests/example.md
 ```
 
-### Option A. Run Locally
-
+You must create the *dbs* directory before proceeding:
 ```
+mkdir dbs
+```
+
+## Option A. Publish using your own python script
+
+Install the package:
+```
+pip install mdtocf
+```
+
+An example based on [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/md2cf.py):
+```python
+confluenceUsername = "olafrv@gmail.com"
+confluenceApiToken = "****************"
+confluenceUrl = "https://olafrv.atlassian.net"
+confluenceSpace = "TEST"
+confluenceParentPageId = "33114"
+confluencePageTitlePrefix = "[Test] "
+markdownDir = "./tests"
+dbPath = "./dbs/tests.db"
+
+from classes.ConfluencePublisher import ConfluencePublisher
+confluencePublisher = ConfluencePublisher(
+    url=confluenceUrl,
+    username=confluenceUsername,
+    apiToken=confluenceApiToken,
+    pageTitlePrefix=confluencePageTitlePrefix,
+    markdownDir=markdownDir,
+    dbPath=dbPath,
+    space=confluenceSpace,
+    parentPageId=confluenceParentPageId,
+    forceUpdate=False,
+    forceDelete=False,
+    skipUpdate=False
+)
+#confluencePublisher.delete()
+confluencePublisher.publish()
+```
+
+### Option B. Publish using local script
+
+```shell
 ./run.sh \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
@@ -59,39 +122,39 @@ find tests/
     --db ./dbs/tests.db
 ```
 
-### Option B. Run on Docker image built locally
+### Option C. Publish using Docker (Image locally built)
 
-```
-docker build -t md2cf .
+```shell
+docker build -t mdtocf .
 docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/tests,target=/md2cf/tests \
-    --mount type=bind,source="$(pwd)"/dbs,target=/md2cf/dbs \
-    md2cf \
+    --mount type=bind,source="$(pwd)"/tests,target=/mdtocf/tests \
+    --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
+    mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir ./tests \
-    --db ./dbs/tests.db
+    --markdownDir "./tests" \
+    --db "./dbs/tests.db"
 ```
 
-### Option C. Run on Docker image downloaded from Github's Packages
+### Option D. Publish using Docker (Image downloaded from Github's Packages)
 
-```
+```shell
 docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/tests,target=/md2cf/tests \
-    --mount type=bind,source="$(pwd)"/dbs,target=/md2cf/dbs \
-    docker.pkg.github.com/olafrv/md2cf/md2cf:1.0.0-rc1
+    --mount type=bind,source="$(pwd)"/tests,target=/mdtocf/tests \
+    --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
+    docker.pkg.github.com/olafrv/mdtocf/mdtocf:1.0.0-rc1
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir ./tests \
-    --db ./dbs/tests.db
+    --markdownDir "./tests" \
+    --db "./dbs/tests.db"
 ```
 
 ## Output and Results
@@ -115,7 +178,7 @@ The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API)
 
 Rendering and publishing **./tests** produce the following final result in Confluence:
 
-![Result in Confluence](https://raw.githubusercontent.com/olafrv/md2cf/master/tests/example.png)
+![Result in Confluence](https://raw.githubusercontent.com/olafrv/mdtocf/master/tests/example.png)
 
 ## About Markdown Compatibility
 
