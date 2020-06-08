@@ -1,17 +1,16 @@
-# This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: 
 # https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 # https://help.github.com/en/actions/reference/virtual-environments-for-github-hosted-runners
 # https://help.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets
 # https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context
+# https://help.github.com/en/actions/reference/events-that-trigger-workflows
 
 name: Python application
 
 on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  release:
+    types:
+      - created
 
 jobs:
   build:
