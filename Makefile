@@ -26,7 +26,7 @@ test-publish: dev
 	--confluenceParentPageId "33114" \
 	--confluencePageTitlePrefix "[Test] " \
 	--markdownDir ./examples \
-	--dbPath ./dbs/tests.db \
+	--dbPath ~/dbs/tests.db \
 	--forceDelete 1 ;
 
 test-re: dev

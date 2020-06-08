@@ -31,7 +31,7 @@ make virtualenv           # Create a new python virtual environment (Optional)
 source venv/bin/activate  # Use python virtual environment (Optional)
 pip install mdtocf        # Option A.1. Python Package (Install from PyPI)
 make install              # Option A.2. Python Package (Use local ./mdtocf)
-mkdir -p dbs              # Create temporal database directory
+mkdir -p ~/dbs            # Create temporal database directory
 ```
 
 See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
@@ -52,8 +52,8 @@ python -m mdtocf.mdtocf \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir "./examples" \
-    --db "./dbs/examples.db"
+    --markdownDir ./examples \
+    --db ~/dbs/examples.db
 ```
 
 # Publish using Docker (Image locally built)
@@ -63,7 +63,7 @@ make docker
 docker run --rm -it mdtocf --help
 docker run --rm -it \
     --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
-    --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
+    --mount type=bind,source=~/dbs,target=/mdtocf/dbs \
     mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
@@ -72,7 +72,7 @@ docker run --rm -it \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir "./examples" \
-    --db "./dbs/examples.db"
+    --db ~/dbs/examples.db
 ```
 
 # Publish using Docker (Image downloaded from Github's Packages)
@@ -83,7 +83,7 @@ export IMAGE=docker.pkg.github.com/olafrv/mdtocf/mdtocf:<VERSION>
 docker run --rm -it $IMAGE --help
 docker run --rm -it \
     --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
-    --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
+    --mount type=bind,source=~/dbs,target=/mdtocf/dbs \
     $IMAGE
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
@@ -91,8 +91,8 @@ docker run --rm -it \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir "./examples" \
-    --db "./dbs/examples.db"
+    --markdownDir ./examples \
+    --db ~/dbs/examples.db
 ```
 
 # Output and Results
