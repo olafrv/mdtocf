@@ -74,6 +74,11 @@ github-docker: docker
 
 # Github Release
 
+# How to delete tags/releases?
+# First, git tag -d 1.0.4
+# Second, git push --delete origin 1.0.4
+# Finally, https://github.com/olafrv/mdtocf/releases (Delete Danlging Drafts)
+
 github-release:
     # https://developer.github.com/v3/repos/releases/#create-a-release
 	echo '${API_JSON}' | curl -d @- https://api.github.com/repos/olafrv/mdtocf/releases?access_token=${GH_TOKEN}
