@@ -49,3 +49,8 @@ jobs:
           --markdownDir ./examples \
           --dbPath ./examples.db \
           --forceDelete 1
+    - name: Publish Package
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      run: |
+        make github-package

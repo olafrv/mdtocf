@@ -59,7 +59,7 @@ github-package: github-docker
 	# Step 4: Publish
 	docker push docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
 
-test-github-docker:
+test-github-docker: github-docker
 	# Step 3: Inspect
 	docker run --rm -it --entrypoint /bin/bash docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
 
