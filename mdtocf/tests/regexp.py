@@ -1,9 +1,10 @@
-from classes.MetadataPlugin import MetadataPlugin
+import sys
+from mdtocf.classes.MetadataPlugin import MetadataPlugin
 
 
 def main():
-
-    file = open('./tests/example.md', mode='r')
+    print(sys.argv[1])
+    file = open(sys.argv[1], mode='r')
     content = file.read()
     file.close()
 

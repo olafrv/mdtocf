@@ -1,5 +1,4 @@
-# docker build -t mdtocf .
-# docker run --rm -it mdtocf -h
+# Execute: `make docker`
 
 FROM ubuntu:18.04 AS stage1
 RUN apt update \
@@ -17,8 +16,6 @@ RUN virtualenv --python=python3.7 venv \
 
 FROM stage2
 COPY . /mdtocf
-WORKDIR /mdtocf
-RUN chmod +x run.sh
 
-ENTRYPOINT [ "/mdtocf/run.sh" ]
+ENTRYPOINT [ "/mdtocf/venv/bin/python" , "-m", "mdtocf.mdtocf" ]
 CMD [ "-c" ]

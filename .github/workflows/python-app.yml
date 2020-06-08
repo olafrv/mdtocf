@@ -39,13 +39,13 @@ jobs:
         CONFLUENCEUSERNAME: ${{ secrets.CONFLUENCEUSERNAME }}
         CONFLUENCEAPITOKEN: ${{ secrets.CONFLUENCEAPITOKEN }}
       run: |
-        python mdtocf.py \
+        python -m mdtocf.mdtocf \
           --confluenceUsername "$CONFLUENCEUSERNAME" \
           --confluenceApiToken "$CONFLUENCEAPITOKEN" \
           --confluenceUrl "https://olafrv.atlassian.net"   \
           --confluenceSpace "TEST" \
           --confluenceParentPageId "33114" \
           --confluencePageTitlePrefix "[Test] " \
-          --markdownDir ./tests \
-          --dbPath ./tests.db \
+          --markdownDir ./examples \
+          --dbPath ./examples.db \
           --forceDelete 1

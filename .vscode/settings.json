@@ -2,5 +2,5 @@
     "python.linting.pylintEnabled": true,
     "python.linting.flake8Enabled": true,
     "python.linting.enabled": true,
-    "python.pythonPath": "venv/bin/python"
+    "python.pythonPath": "/home/ubuntu/Code/mdtocf/venv/bin/python3.7"
 }

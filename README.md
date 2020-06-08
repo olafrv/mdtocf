@@ -1,8 +1,6 @@
-# Markdown To Confluence (mdtocf)
+# Requirements
 
-## Requirements
-
-This solutions has been tested and designed for:
+This Python package has been tested and designed for:
 
 * [Ubuntu 18.04 LTS](https://releases.ubuntu.com/)
 * [Python 3.7.5](https://docs.python.org/3/) and several python libraries:
@@ -13,121 +11,58 @@ This solutions has been tested and designed for:
 Please see [requirements.txt](https://github.com/olafrv/mdtocf/blob/master/requirements.txt)
 for specific python packages/modules versions required.
 
-## Missing Features (Todo)
+# Missing Features (Todo)
 
 * Attachments (e.g. images, pdf, etc.)
 
-# Usage
+# Install
 
-## Setup python virtual environment
-
-Commands vary depending on the repository and usage options:
-
-* PyPI (Only for Option A below).
-* Github (Only for Options B, C and D below).
-
-### Using PyPI Package
-
-```
-apt install -y virtualenv python3.7 python-pip
-virtualenv --python=python3.7 venv
-chmod +x venv/bin/activate
-. venv/bin/activate
-python -m pip install --upgrade pip
-pip install mdtocf
-```
-
-### Using Github Repository
+Download and prepare virtual environment for Python:
 
 ```shell
-apt install -y virtualenv python3.7 python-pip
-git clone "https://github.com/olafrv/mdtocf.git" --branch 1.0.0-rc1 --single-branch
+git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
-virtualenv --python=python3.7 venv
-chmod +x venv/bin/activate
-. venv/bin/activate
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-chmod +x run.sh
+make virtualenv           # Create a new python virtual environment (Optional)
 ```
 
-## Source markdown and database directores
-
-An [example markdown directory](https://github.com/olafrv/mdtocf) is shown here:
+**Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-find tests/
-./tests
-./tests/A
-./tests/A/aa.md
-./tests/A/_index.md
-./tests/A/B
-./tests/A/B/bb.md
-./tests/example.png
-./tests/example.md
+source venv/bin/activate  # Use python virtual environment (Optional)
+pip install mdtocf        # Option A.1. Python Package (Install from PyPI)
+make install              # Option A.2. Python Package (Use local ./mdtocf)
+mkdir -p dbs              # Create temporal database directory
 ```
 
-You must create the *dbs* directory before proceeding:
-```
-mkdir dbs
-```
+See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
+and the target *test-publish* inside [Makefile](https://github.com/olafrv/mdtocf/blob/master/mdtocf/Makefile)
+show some parameters examples.
 
-## Option A. Publish using your own python script
+# Publish using local script
 
-Install the package:
-```
-pip install mdtocf
-```
-
-An example based on [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/md2cf.py):
-```python
-confluenceUsername = "olafrv@gmail.com"
-confluenceApiToken = "****************"
-confluenceUrl = "https://olafrv.atlassian.net"
-confluenceSpace = "TEST"
-confluenceParentPageId = "33114"
-confluencePageTitlePrefix = "[Test] "
-markdownDir = "./tests"
-dbPath = "./dbs/tests.db"
-
-from classes.ConfluencePublisher import ConfluencePublisher
-confluencePublisher = ConfluencePublisher(
-    url=confluenceUrl,
-    username=confluenceUsername,
-    apiToken=confluenceApiToken,
-    pageTitlePrefix=confluencePageTitlePrefix,
-    markdownDir=markdownDir,
-    dbPath=dbPath,
-    space=confluenceSpace,
-    parentPageId=confluenceParentPageId,
-    forceUpdate=False,
-    forceDelete=False,
-    skipUpdate=False
-)
-#confluencePublisher.delete()
-confluencePublisher.publish()
-```
-
-### Option B. Publish using local script
+**Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-./run.sh \
+source venv/bin/activate  # Use python virtual environment (Optional)
+python -m mdtocf.mdtocf --help
+python -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net" \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir ./tests \
-    --db ./dbs/tests.db
+    --markdownDir "./examples" \
+    --db "./dbs/examples.db"
 ```
 
-### Option C. Publish using Docker (Image locally built)
+# Publish using Docker (Image locally built)
 
 ```shell
-docker build -t mdtocf .
+make docker
+docker run --rm -it mdtocf --help
 docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/tests,target=/mdtocf/tests \
+    --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
     --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
     mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
@@ -136,28 +71,31 @@ docker run --rm -it \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir "./tests" \
-    --db "./dbs/tests.db"
+    --markdownDir "./examples" \
+    --db "./dbs/examples.db"
 ```
 
-### Option D. Publish using Docker (Image downloaded from Github's Packages)
+# Publish using Docker (Image downloaded from Github's Packages)
 
 ```shell
+# Check <VERSION> in https://github.com/olafrv/mdtocf/packages 
+export IMAGE=docker.pkg.github.com/olafrv/mdtocf/mdtocf:<VERSION> 
+docker run --rm -it $IMAGE --help
 docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/tests,target=/mdtocf/tests \
+    --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
     --mount type=bind,source="$(pwd)"/dbs,target=/mdtocf/dbs \
-    docker.pkg.github.com/olafrv/mdtocf/mdtocf:1.0.0-rc1
+    $IMAGE
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net"   \
     --confluenceSpace "TEST" \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
-    --markdownDir "./tests" \
-    --db "./dbs/tests.db"
+    --markdownDir "./examples" \
+    --db "./dbs/examples.db"
 ```
 
-## Output and Results
+# Output and Results
 
 Output:
 ```
@@ -176,9 +114,9 @@ The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API)
 
 ## Results in Confluence
 
-Rendering and publishing **./tests** produce the following final result in Confluence:
+Rendering and publishing **./examples** produce the following final result in Confluence:
 
-![Result in Confluence](https://raw.githubusercontent.com/olafrv/mdtocf/master/tests/example.png)
+![Result in Confluence](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/example.png)
 
 ## About Markdown Compatibility
 
@@ -194,7 +132,11 @@ chapter: true
 kind: index
 ```
 It is parsed and partially used by this script to organize the content in
-Attlasian Confluence. A test for this is available in **regexp_test.py**).
+Attlasian Confluence. A test for this can be run:
+
+```shell
+make test-re
+```
 
 # References
 

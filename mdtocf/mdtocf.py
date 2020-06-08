@@ -4,7 +4,7 @@ This script convert markdown pages and publish them to confluence pages
 
 """
 import argparse
-from classes.ConfluencePublisher import ConfluencePublisher
+from mdtocf.classes.ConfluencePublisher import ConfluencePublisher
 
 
 def main():

@@ -5,11 +5,11 @@ Encapsulate the logic of processing a markdown directory tree.
 """
 import os
 import mistune
-from classes.MetadataPlugin import MetadataPlugin
-from classes.ConfluenceRenderer import ConfluenceRenderer
-from classes.KeyValue import KeyValue
+from .MetadataPlugin import MetadataPlugin
+from .ConfluenceRenderer import ConfluenceRenderer
+from .KeyValue import KeyValue
 from atlassian import Confluence
-
+from urllib.error import HTTPError
 
 class ConfluencePublisher():
 
@@ -135,18 +135,22 @@ class ConfluencePublisher():
             indexWithChilds = False
             if filepath.endswith('_index.md'):
                 childs = 0
-                for f in os.scandir(os.path.dirname(filepath)):
-                    if f.path.endswith(".md") and \
-                       not f.path.endswith('_index.md'):
-                        childs = childs + 1
+                if os.path.isdir(os.path.dirname(filepath)):
+                    for f in os.scandir(os.path.dirname(filepath)):
+                        if f.path.endswith(".md") and \
+                           not f.path.endswith('_index.md'):
+                            childs = childs + 1
                 indexWithChilds = childs > 0
 
             if not os.path.isfile(filepath) and \
                not indexWithChilds or self.forceDelete:
                 print('DEL => Id: '
                       + metadata['id'] + ', Title: ' + metadata['title'])
-                if self.api.get_page_by_id(metadata['id']):
-                    self.api.remove_page(metadata['id'])
+                try:
+                    if self.api.get_page_by_id(metadata['id']):
+                        self.api.remove_page(metadata['id'])
+                except HTTPError:
+                    pass
                 self.kv.remove(filepath)
 
     def publish(self):
