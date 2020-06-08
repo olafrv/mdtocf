@@ -55,13 +55,13 @@ docker-clean:
 
 # Github Package
 
-test-github-package:
-	# Step 4: Inspect
-	docker run --rm -it --entrypoint /bin/bash docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
-
 github-package: github-docker
-	# Step 3: Publish
+	# Step 4: Publish
 	docker push docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
+
+test-github-docker:
+	# Step 3: Inspect
+	docker run --rm -it --entrypoint /bin/bash docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
 
 github-docker: docker
 	# https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line
