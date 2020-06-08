@@ -1,4 +1,6 @@
 VERSION:=$(shell cat VERSION)
+API_JSON:=$(shell printf '{"tag_name": "%s","target_commitish": "master","name": "%s","body": "Release of version %s","draft": false,"prerelease": false}' ${VERSION} ${VERSION} ${VERSION})
+
 PYTHON=venv/bin/python
 
 # General
@@ -69,6 +71,12 @@ github-docker: docker
 	echo ${GH_TOKEN} | docker login docker.pkg.github.com -u olafrv --password-stdin
 	# Step 2: Tag
 	docker tag mdtocf:latest docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
+
+# Github Release
+
+github-release:
+    # https://developer.github.com/v3/repos/releases/#create-a-release
+	echo '${API_JSON}' | curl -d @- https://api.github.com/repos/olafrv/mdtocf/releases?access_token=${GH_TOKEN}
 
 # Python Package Index (PyPI)
 

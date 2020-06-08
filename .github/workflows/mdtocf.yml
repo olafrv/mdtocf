@@ -5,7 +5,7 @@
 # https://help.github.com/en/actions/reference/context-and-expression-syntax-for-github-actions#github-context
 # https://help.github.com/en/actions/reference/events-that-trigger-workflows
 
-name: Python application
+name: mdtocf
 
 on:
   release:

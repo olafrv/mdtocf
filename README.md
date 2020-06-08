@@ -1,3 +1,7 @@
+# Release Status
+
+![mdtocf](https://github.com/olafrv/mdtocf/workflows/Python%20application/badge.svg)
+
 # Requirements
 
 This Python package has been tested and designed for:
