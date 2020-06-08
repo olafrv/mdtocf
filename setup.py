@@ -1,3 +1,5 @@
+# https://packaging.python.org/guides/distributing-packages-using-setuptools/
+
 import setuptools
 
 with open("README.md", "r") as fh:
