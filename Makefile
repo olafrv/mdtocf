@@ -81,7 +81,8 @@ github-docker: docker
 
 github-release:
     # https://developer.github.com/v3/repos/releases/#create-a-release
-	echo '${API_JSON}' | curl -d @- https://api.github.com/repos/olafrv/mdtocf/releases?access_token=${GH_TOKEN}
+	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
+	echo '${API_JSON}' | curl -H 'Authorization: ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
 
 # Python Package Index (PyPI)
 
