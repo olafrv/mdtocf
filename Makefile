@@ -91,7 +91,7 @@ github-docker: docker
 # How to delete tags/releases?
 # First, git tag -d 1.0.4
 # Second, git push --delete origin 1.0.4
-# Finally, https://github.com/olafrv/mdtocf/releases (Delete Danlging Drafts)
+# Finally, https://github.com/olafrv/mdtocf/releases (Discard Danlging Draft)
 
 github-release:
     # https://developer.github.com/v3/repos/releases/#create-a-release
