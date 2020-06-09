@@ -31,11 +31,11 @@ Install the package for its use:
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate         # Use python virtual environment (Optional)
+source venv/bin/activate         # Use virtual environment (if created)
 make install                     # Option 1: Use local package in ./mdtocf
 make install-pypi                # Option 2: Install package from PyPI
 mkdir -p ~/dbs                   # Create temporal database directory
-deactivate                       # Deactivate virtual environment (Optional)
+deactivate                       # Deactivate virtual environment (if activated)
 ```
 
 See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
@@ -47,11 +47,12 @@ show some parameters examples.
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate               # Use python virtual environment (Optional)
-export PYTHON=python                   # Virtual Environment (Default, after 'source')
-#export PYTHON=venv/bin/python         # Virtual Environment (Default, without 'source')       
-#export PYTHON=venv/bin/python3.7      # Virtual Environment (Default = 3.7, without 'source')
-#export PYTHON=/usr/bin/python3.7      # Use system level Python (without virtual environment)
+source venv/bin/activate               # Virtual environment (if created)
+export PYTHON=python                   # - Default, after activation ($PATH)
+#export PYTHON=venv/bin/python         # - Default, without activation
+#export PYTHON=venv/bin/python3.7      # - Ver=3.7, without activation (equal to previous line)
+#export PYTHON=/usr/bin/python3.7      # System level Python (Using fullpath to binary)
+#export PYTHON=python3.7               # System level Python ($PATH)
 ${PYTHON} -m mdtocf.mdtocf --help
 ${PYTHON} -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
@@ -62,7 +63,7 @@ ${PYTHON} -m mdtocf.mdtocf \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
     --db ~/dbs/examples.db
-deactivate                       # Deactivate virtual environment (Optional)
+deactivate                             # Deactivate virtual environment (Optional)
 ```
 
 # Publish using Docker (Image locally built)
