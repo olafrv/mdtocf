@@ -117,13 +117,13 @@ Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 ```
 The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API).
 
-## Results in Confluence
+# Results in Confluence
 
 Rendering and publishing **./examples** produce the following final result in Confluence:
 
 ![Result in Confluence](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/example.png)
 
-## About Markdown Compatibility
+# About Markdown Compatibility
 
 This scripts depends on [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
 compatible with [CommonMark](https://spec.commonmark.org)
@@ -141,6 +141,31 @@ Attlasian Confluence. A test for this can be run:
 
 ```shell
 make test-re
+```
+
+# Uninstall
+
+```shell
+source venv/bin/activate         # Activate virtual environment (optional)
+make uninstall                   # Remove installed package and dependencies
+deactivate                       # Deactivate virtual environment (if activated)
+```
+
+# Development & Testing
+
+```shell
+make python-version     # Print detected Python version (also after target "dev")
+make python-path        # Print detected Python binary (also after target "dev")
+make dev                # Virtualenv and install (./mdtocf)
+make test-re            # Test markdown metadata regexp
+make test-publish       # Publish ./examples to Atlassian
+make test-docker        # Test docker image
+make test-gihub-docker  # Test github docker package image
+git commit -a           # After increment VERSION file content
+#make github-package    # Already done by target "github-release"
+#make pypi-live         # Already done by target "github-release"
+make github-release     # Will trigger .github/workflows/mdtocf.yml
+make clean              # Delete temporal dirs, files and docker images
 ```
 
 # References
