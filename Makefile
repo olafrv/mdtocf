@@ -18,7 +18,7 @@ virtualenv:
 	test -d venv/ || virtualenv --python=python3.7 venv && venv/bin/python -m pip install --upgrade pip
 
 python-version:
-	@echo ${PYTHON}
+	@echo ${PYTHON}; 
 	@${PYTHON} --version 2>&1 | grep "Python 3.7" && exit 0 || ${PYTHON} --version && exit 1
 
 # Development & Testing
