@@ -1,6 +1,6 @@
 VERSION:=$(shell cat VERSION)
 API_JSON:=$(shell printf '{"tag_name": "%s","target_commitish": "master","name": "%s","body": "Release of version %s","draft": false,"prerelease": false}' ${VERSION} ${VERSION} ${VERSION})
-PYTHON:=$(shell test -f venv && echo venv/bin/python || test -f $$(which python3) && echo $$(which python3) || echo python)
+PYTHON:=$(shell test -f venv && echo venv/bin/python || test -f $$(which python3.7) && echo $$(which python3.7) || echo python)
 
 # General
 
@@ -10,11 +10,14 @@ help: python-version
 install: python-version
 	${PYTHON} -m pip install -r requirements.txt
 
+install-pypi: python-version
+	${PYTHON} -m pip install mdtocf  
+
 uninstall: python-version
 	${PYTHON} -m pip uninstall -y -r requirements.txt
 
 virtualenv:
-	virtualenv --version >/dev/null || sudo apt install -y virtualenv python3.7 python3-pip
+	virtualenv --version >/dev/null || sudo apt install -y virtualenv
 	test -d venv/ || virtualenv --python=python3.7 venv && venv/bin/python -m pip install --upgrade pip
 
 python-version:

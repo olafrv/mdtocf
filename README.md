@@ -17,21 +17,25 @@ for specific python packages/modules versions required.
 
 # Install
 
-Download and prepare virtual environment for Python:
+Download the package and prepare Python environment:
 
 ```shell
 git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
-make virtualenv           # Create a new python virtual environment (Optional)
+sudo apt install -y python3.7 python3-pip  # Option 1: Install Python globally
+make virtualenv                            # Option 2: Create a Python virtual environment
 ```
+
+Install the package for its use:
 
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate  # Use python virtual environment (Optional)
-pip install mdtocf        # Option A.1. Python Package (Install from PyPI)
-make install              # Option A.2. Python Package (Use local ./mdtocf)
-mkdir -p ~/dbs            # Create temporal database directory
+source venv/bin/activate         # Use python virtual environment (Optional)
+make install                     # Option 1: Use local package in ./mdtocf
+make install-pypi                # Option 2: Install package from PyPI
+mkdir -p ~/dbs                   # Create temporal database directory
+deactivate                       # Deactivate virtual environment (Optional)
 ```
 
 See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
@@ -43,9 +47,11 @@ show some parameters examples.
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate  # Use python virtual environment (Optional)
-python -m mdtocf.mdtocf --help
-python -m mdtocf.mdtocf \ 
+source venv/bin/activate         # Use python virtual environment (Optional)
+export PYTHON=python           
+#export PYTHON=python3.7         # Needed only if not using virtual environment
+${PYTHON} -m mdtocf.mdtocf --help
+${PYTHON} -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net" \
@@ -54,6 +60,7 @@ python -m mdtocf.mdtocf \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
     --db ~/dbs/examples.db
+deactivate                       # Deactivate virtual environment (Optional)
 ```
 
 # Publish using Docker (Image locally built)
