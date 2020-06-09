@@ -1,19 +1,25 @@
 VERSION:=$(shell cat VERSION)
 API_JSON:=$(shell printf '{"tag_name": "%s","target_commitish": "master","name": "%s","body": "Release of version %s","draft": false,"prerelease": false}' ${VERSION} ${VERSION} ${VERSION})
-
-PYTHON=venv/bin/python
+PYTHON:=$(shell test -f venv && echo venv/bin/python || test -f $$(which python3) && echo $$(which python3) || echo python)
 
 # General
 
-help:
+help: python-version
 	${PYTHON} -m mdtocf.mdtocf --help
 
-virtualenv:
-	virtualenv --version >/dev/null || sudo apt install -y virtualenv python3.7 python-pip
-	test -d venv/ || virtualenv --python=python3.7 venv && ${PYTHON} -m pip install --upgrade pip
-
-install:
+install: python-version
 	${PYTHON} -m pip install -r requirements.txt
+
+uninstall: python-version
+	${PYTHON} -m pip uninstall -y -r requirements.txt
+
+virtualenv:
+	virtualenv --version >/dev/null || sudo apt install -y virtualenv python3.7 python3-pip
+	test -d venv/ || virtualenv --python=python3.7 venv && venv/bin/python -m pip install --upgrade pip
+
+python-version:
+	@echo ${PYTHON}
+	@${PYTHON} --version 2>&1 | grep "Python 3.7" && exit 0 || ${PYTHON} --version && exit 1
 
 # Development & Testing
 
@@ -92,7 +98,7 @@ pypi-live: pypi-clean pypi
 pypi-test: pypi-clean pypi
 	${PYTHON} -m twine upload --skip-existing --username __token__ --password "${PY_TEST_TOKEN}" --repository testpypi dist/*
 
-pypi: virtualenv
+pypi: virtualenv 
 	# https://packaging.python.org/tutorials/packaging-projects/
 	${PYTHON} -m pip install --upgrade setuptools wheel
 	${PYTHON} -m pip install --upgrade twine
