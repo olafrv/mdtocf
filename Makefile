@@ -1,6 +1,11 @@
 VERSION:=$(shell cat VERSION)
 API_JSON:=$(shell printf '{"tag_name": "%s","target_commitish": "master","name": "%s","body": "Release of version %s","draft": false,"prerelease": false}' ${VERSION} ${VERSION} ${VERSION})
-PYTHON:=$(shell test -f venv && echo venv/bin/python || test -f $$(which python3.7) && echo $$(which python3.7) || echo python)
+PYTHON:=$(shell ( \
+	test -d venv && echo venv/bin/python ) \
+	|| ( ! test -z $$(which python3.7) && echo $$(which python3.7) ) \
+	|| ( ! test -z $$(which python3) && echo $$(which python3) ) \
+	|| echo python \
+	)
 
 # General
 
@@ -17,7 +22,7 @@ uninstall: python-version
 	${PYTHON} -m pip uninstall -y -r requirements.txt
 
 virtualenv:
-	virtualenv --version >/dev/null || sudo apt install -y virtualenv
+	sudo apt install -y virtualenv python3.7 python3-pip
 	test -d venv/ || virtualenv --python=python3.7 venv && venv/bin/python -m pip install --upgrade pip
 
 python-version:
@@ -62,7 +67,7 @@ docker: docker-clean
 	docker build -t mdtocf .
 
 docker-clean:
-	docker images | grep mdtocf | awk '{print $$3}' | xargs --no-run-if-empty -n1 docker image rm
+	docker images | grep mdtocf | awk '{print $$1":"$$2}' | sort | xargs --no-run-if-empty -n1 docker image rm
 
 # Github Package
 
@@ -101,7 +106,7 @@ pypi-live: pypi-clean pypi
 pypi-test: pypi-clean pypi
 	${PYTHON} -m twine upload --skip-existing --username __token__ --password "${PY_TEST_TOKEN}" --repository testpypi dist/*
 
-pypi: virtualenv 
+pypi: python-version
 	# https://packaging.python.org/tutorials/packaging-projects/
 	${PYTHON} -m pip install --upgrade setuptools wheel
 	${PYTHON} -m pip install --upgrade twine
