@@ -38,7 +38,7 @@ deactivate                       # Deactivate virtual environment (if activated)
 ```
 
 See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
-and the target *test-publish* inside [Makefile](https://github.com/olafrv/mdtocf/blob/master/mdtocf/Makefile)
+and the target *test-publish* inside [Makefile](https://github.com/olafrv/mdtocf/blob/master/Makefile)
 show some parameters examples.
 
 # Publish using local script
@@ -130,11 +130,13 @@ compatible with [CommonMark](https://spec.commonmark.org)
 
 The (optional) metadata heading in markdown (.md) files likes the one which follows below used by [Hugo](https://gohugo.io/getting-started/quick-start/), it is not part of CommonMarkdown standard, but just a popular way of specify in YAML markdown metadata usable for external tools.
 ```yaml
+---
 title: My Page Title
 date: 2019-03-26T08:47:11+01:00
 draft: true
 chapter: true
 kind: index
+---
 ```
 It is parsed and partially used by this script to organize the content in
 Attlasian Confluence. A test for this can be run:
