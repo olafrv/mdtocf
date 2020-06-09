@@ -53,7 +53,7 @@ docker: docker-clean
 	docker build -t mdtocf .
 
 docker-clean:
-	docker images | grep mdtocf && docker image rm mdtocf || true
+	docker images | grep mdtocf | awk '{print $$3}' | xargs --no-run-if-empty -n1 docker image rm
 
 # Github Package
 
