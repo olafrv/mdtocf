@@ -17,13 +17,12 @@ for specific python packages/modules versions required.
 
 # Install
 
-Download the package and prepare Python environment:
+Download the package and prepare Python environment alternatives:
 
 ```shell
 git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
-sudo apt install -y python3.7 python3-pip  # Option 1: Install Python at system level
-make virtualenv                            # Option 2: Create a Python virtual environment
+make virtualenv
 ```
 
 Install the package for its use:
@@ -31,7 +30,7 @@ Install the package for its use:
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate         # Use virtual environment (if created)
+source venv/bin/activate         # Activate virtual environment (optional)
 make install                     # Option 1: Use local package in ./mdtocf
 make install-pypi                # Option 2: Install package from PyPI
 mkdir -p ~/dbs                   # Create temporal database directory
@@ -48,11 +47,7 @@ show some parameters examples.
 
 ```shell
 source venv/bin/activate               # Virtual environment (if created)
-export PYTHON=python                   # - Default, after activation ($PATH)
-#export PYTHON=venv/bin/python         # - Default, without activation
-#export PYTHON=venv/bin/python3.7      # - Ver=3.7, without activation (equal to previous line)
-#export PYTHON=/usr/bin/python3.7      # System level Python (Using fullpath to binary)
-#export PYTHON=python3.7               # System level Python ($PATH)
+PYTHON=$(make python-path)             # Used: ven/bin/python or $PATH (python3.7, python3 or python)
 ${PYTHON} -m mdtocf.mdtocf --help
 ${PYTHON} -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \

@@ -25,6 +25,9 @@ virtualenv:
 	sudo apt install -y virtualenv python3.7 python3-pip
 	test -d venv/ || virtualenv --python=python3.7 venv && venv/bin/python -m pip install --upgrade pip
 
+python-path:
+	@echo ${PYTHON}
+
 python-version:
 	@echo ${PYTHON}; 
 	@${PYTHON} --version 2>&1 | grep "Python 3.7" && exit 0 || ${PYTHON} --version && exit 1
