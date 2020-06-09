@@ -47,7 +47,7 @@ show some parameters examples.
 
 ```shell
 source venv/bin/activate               # Virtual environment (if created)
-PYTHON=$(make python-path)             # Used: ven/bin/python or $PATH (python3.7, python3 or python)
+PYTHON=$(make python-path)             # Used: venv/bin/python or $PATH (python3.7, python3 or python)
 ${PYTHON} -m mdtocf.mdtocf --help
 ${PYTHON} -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
