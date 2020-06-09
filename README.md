@@ -22,7 +22,7 @@ Download the package and prepare Python environment:
 ```shell
 git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
-sudo apt install -y python3.7 python3-pip  # Option 1: Install Python globally
+sudo apt install -y python3.7 python3-pip  # Option 1: Install Python at system level
 make virtualenv                            # Option 2: Create a Python virtual environment
 ```
 
@@ -47,9 +47,11 @@ show some parameters examples.
 **Note:** If you skip virtual environment you should ensure using python >= 3.7
 
 ```shell
-source venv/bin/activate         # Use python virtual environment (Optional)
-export PYTHON=python           
-#export PYTHON=python3.7         # Needed only if not using virtual environment
+source venv/bin/activate               # Use python virtual environment (Optional)
+export PYTHON=python                   # Virtual Environment (Default, after 'source')
+#export PYTHON=venv/bin/python         # Virtual Environment (Default, without 'source')       
+#export PYTHON=venv/bin/python3.7      # Virtual Environment (Default = 3.7, without 'source')
+#export PYTHON=/usr/bin/python3.7      # Use system level Python (without virtual environment)
 ${PYTHON} -m mdtocf.mdtocf --help
 ${PYTHON} -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
