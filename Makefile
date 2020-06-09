@@ -58,6 +58,18 @@ clean: pypi-clean docker-clean
 	find mdtocf/. -type d -name '__pycache__' -empty -delete
 	find mdtocf/. -type f -name '*.pyc' -delete
 
+# Github Release
+
+# How to delete tags/releases?
+# First, git tag -d 1.0.4
+# Second, git push --delete origin 1.0.4
+# Finally, https://github.com/olafrv/mdtocf/releases (Discard Danlging Draft)
+
+github-release:
+    # https://developer.github.com/v3/repos/releases/#create-a-release
+	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
+	echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
+
 # Docker Image
 
 test-docker: docker
@@ -88,18 +100,6 @@ github-docker: docker
 	echo ${GH_TOKEN} | docker login docker.pkg.github.com -u olafrv --password-stdin
 	# Step 2: Tag
 	docker tag mdtocf:latest docker.pkg.github.com/olafrv/mdtocf/mdtocf:${VERSION}
-
-# Github Release
-
-# How to delete tags/releases?
-# First, git tag -d 1.0.4
-# Second, git push --delete origin 1.0.4
-# Finally, https://github.com/olafrv/mdtocf/releases (Discard Danlging Draft)
-
-github-release:
-    # https://developer.github.com/v3/repos/releases/#create-a-release
-	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
-	echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
 
 # Python Package Index (PyPI)
 
