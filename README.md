@@ -58,7 +58,7 @@ ${PYTHON} -m mdtocf.mdtocf \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
     --db ~/dbs/examples.db
-deactivate                             # Deactivate virtual environment (Optional)
+deactivate                             # Deactivate virtual environment (if activated)
 ```
 
 # Publish using Docker (Image locally built)
