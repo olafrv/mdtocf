@@ -52,6 +52,7 @@ test-re: dev
 	${PYTHON} -m mdtocf.tests.regexp ./examples/example.md
 
 dev: virtualenv install
+	venv/bin/python -m pip install pylint flake8
 
 clean: pypi-clean docker-clean
 	rm -rf venv/
