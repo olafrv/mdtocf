@@ -9,7 +9,8 @@ from .MetadataPlugin import MetadataPlugin
 from .ConfluenceRenderer import ConfluenceRenderer
 from .KeyValue import KeyValue
 from atlassian import Confluence
-from urllib.error import HTTPError
+from requests import HTTPError
+
 
 class ConfluencePublisher():
 
@@ -104,8 +105,29 @@ class ConfluencePublisher():
             print('SKP => Title: ' + title)
             return self.api.get_page_id(space, title)
 
+    def __deleteAttachment(self, filepath):
+        metadata = self.kv.load(filepath)
+        filename = os.path.basename(filepath)
+        if metadata['id']:
+            print('DEL Att. => Title: ' + filename)        
+            # https://confluence.atlassian.com/confkb/confluence-rest-api-lacks-delete-method-for-attachments-715361922.html
+            # self.api.delete_attachment_by_id(metadata['id'], 1)
+            self.api.remove_content(metadata['id'])
+
+    def __updateAttachment(self, space, pageId, filepath):
+        filename = os.path.basename(filepath)
+
+        print('UPD Att. => Title: ' + filename)
+        results = self.api.attach_file(filepath,
+                                       name=filename,
+                                       page_id=pageId,
+                                       space=space)
+        id = results['id'] if 'id' in results else results['results'][0]['id']
+        self.kv.save(filepath, {'id': id, 'title': filename, 'sha256': None})
+        return id
+
     def __publishRecursive(self, space, parentId, path):
-        # Files: _index.md
+        # File: _index.md
         indexParentId = parentId
         indexPath = path + os.sep + '_index.md'
         if os.path.isfile(indexPath):
@@ -123,15 +145,21 @@ class ConfluencePublisher():
             if f.is_dir():
                 self.__publishRecursive(space, indexParentId, f.path)
 
-        # Files: *.md (Except _index.md)
+        # Files: *.* (Except _index.md)
         for f in os.scandir(path):
-            if f.path.endswith(".md") and not f.path.endswith('_index.md'):
-                self.__updatePage(space, indexParentId, f.path)
+            if f.is_file():
+                if f.path.endswith(".md"):
+                    if not f.path.endswith(os.sep + '_index.md'):
+                        self.__updatePage(space, indexParentId, f.path)
+                else:
+                    self.__deleteAttachment(f.path)
+                    self.__updateAttachment(space, indexParentId, f.path)
 
     def delete(self):
         for filepath in sorted(self.kv.keys()):
             metadata = self.kv.load(filepath)
 
+            # Page has Sub-pages (Childs)?
             indexWithChilds = False
             if filepath.endswith('_index.md'):
                 childs = 0
@@ -142,15 +170,23 @@ class ConfluencePublisher():
                             childs = childs + 1
                 indexWithChilds = childs > 0
 
-            if not os.path.isfile(filepath) and \
-               not indexWithChilds or self.forceDelete:
+            if self.forceDelete \
+               or (not os.path.isfile(filepath) and not indexWithChilds):
                 print('DEL => Id: '
                       + metadata['id'] + ', Title: ' + metadata['title'])
                 try:
-                    if self.api.get_page_by_id(metadata['id']):
-                        self.api.remove_page(metadata['id'])
-                except HTTPError:
-                    pass
+                    if filepath.endswith(".md"):
+                        if self.api.get_page_by_id(metadata['id']):
+                            self.api.remove_page(metadata['id'])
+                    else:
+                        self.__deleteAttachment(filepath)
+                except HTTPError as ex:
+                    code = ex.response.status_code
+                    if code != 404:
+                        print("DEL Pag. (Error):" + str(code))
+                    else:
+                        pass
+
                 self.kv.remove(filepath)
 
     def publish(self):
