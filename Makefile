@@ -1,6 +1,11 @@
+# https://makefiletutorial.com/
+
+# Attention: Expanded when defined (:=)
 VERSION:=$(shell cat VERSION)
 API_JSON:=$(shell printf '{"tag_name": "%s","target_commitish": "master","name": "%s","body": "Release of version %s","draft": false,"prerelease": false}' ${VERSION} ${VERSION} ${VERSION})
-PYTHON:=$(shell ( \
+
+# Attention: Expanded when called (=)
+PYTHON=$(shell ( \
 	test -d venv && echo venv/bin/python ) \
 	|| ( ! test -z $$(which python3.7) && echo $$(which python3.7) ) \
 	|| ( ! test -z $$(which python3) && echo $$(which python3) ) \
@@ -52,7 +57,7 @@ test-re: dev
 	${PYTHON} -m mdtocf.tests.regexp ./examples/example.md
 
 dev: virtualenv install
-	venv/bin/python -m pip install pylint flake8
+	${PYTHON} -m pip install -r requirements-dev.txt
 
 clean: pypi-clean docker-clean
 	rm -rf venv/
