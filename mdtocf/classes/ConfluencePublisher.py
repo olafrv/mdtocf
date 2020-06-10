@@ -9,6 +9,7 @@ from .MetadataPlugin import MetadataPlugin
 from .ConfluenceRenderer import ConfluenceRenderer
 from .KeyValue import KeyValue
 from atlassian import Confluence
+from atlassian.confluence import ApiError
 from requests import HTTPError
 
 
@@ -109,10 +110,13 @@ class ConfluencePublisher():
         metadata = self.kv.load(filepath)
         filename = os.path.basename(filepath)
         if metadata['id']:
-            print('DEL Att. => Title: ' + filename)        
-            # https://confluence.atlassian.com/confkb/confluence-rest-api-lacks-delete-method-for-attachments-715361922.html
-            # self.api.delete_attachment_by_id(metadata['id'], 1)
-            self.api.remove_content(metadata['id'])
+            try:
+                print('DEL Att. => Title: ' + filename)        
+                # https://confluence.atlassian.com/confkb/confluence-rest-api-lacks-delete-method-for-attachments-715361922.html
+                # self.api.delete_attachment_by_id(metadata['id'], 1)
+                self.api.remove_content(metadata['id'])
+            except (HTTPError, ApiError):
+                pass
 
     def __updateAttachment(self, space, pageId, filepath):
         filename = os.path.basename(filepath)
@@ -174,18 +178,18 @@ class ConfluencePublisher():
                or (not os.path.isfile(filepath) and not indexWithChilds):
                 print('DEL => Id: '
                       + metadata['id'] + ', Title: ' + metadata['title'])
-                try:
-                    if filepath.endswith(".md"):
+                if filepath.endswith(".md"):
+                    try:
                         if self.api.get_page_by_id(metadata['id']):
                             self.api.remove_page(metadata['id'])
-                    else:
-                        self.__deleteAttachment(filepath)
-                except HTTPError as ex:
-                    code = ex.response.status_code
-                    if code != 404:
-                        print("DEL Pag. (Error):" + str(code))
-                    else:
-                        pass
+                    except HTTPError as ex:
+                        code = ex.response.status_code
+                        if code != 404:
+                            print("DEL Pag. (Error):" + str(code))
+                        else:
+                            pass
+                else:
+                    self.__deleteAttachment(filepath)
 
                 self.kv.remove(filepath)
 

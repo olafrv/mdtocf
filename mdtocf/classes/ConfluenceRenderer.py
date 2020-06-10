@@ -28,7 +28,10 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
             return \
                 '\n<ac:link><ri:attachment ri:filename="' + link + '" />' \
                 + '<ac:plain-text-link-body>' \
-                + '<![CDATA[Link to a Confluence Attachment]]>' \
+                + '<![CDATA[' \
+                + (text if text is not None else \
+                  'Link to a Confluence Attachment') \
+                + ']]>' \
                 + '</ac:plain-text-link-body>' \
                 + '</ac:link>\n'
         else:

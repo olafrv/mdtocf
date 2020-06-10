@@ -104,6 +104,13 @@ docker run --rm -it \
 
 Output:
 ```
+DEL => Id: 3409835, Title: [Test] Folder B
+DEL => Id: 3409844, Title: [Test] 1
+DEL => Id: 3409824, Title: [Test] Folder A
+DEL => Id: 3409853, Title: [Test] Page AA
+DEL => Id: att3409862, Title: example.png
+DEL Att. => Title: example.png
+DEL => Id: 3409867, Title: [Test] Example Page
 UPD => Title: [Test] Folder A
 Can't find '[Test] Folder A' page on the https://olafrv.atlassian.net/wiki!
 IDX => Title: [Test] Folder B
@@ -112,6 +119,8 @@ UPD => Title: [Test] 1
 Can't find '[Test] 1' page on the https://olafrv.atlassian.net/wiki!
 UPD => Title: [Test] Page AA
 Can't find '[Test] Page AA' page on the https://olafrv.atlassian.net/wiki!
+UPD Att. => Title: example.png
+UPD Att. => Title: example.png
 UPD => Title: [Test] Example Page
 Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 ```
@@ -121,7 +130,9 @@ The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API)
 
 Rendering and publishing **./examples** produce the following final result in Confluence:
 
-![Result in Confluence](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/example.png)
+![Result #1](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/A/example.png)
+
+![Result #2](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/example.png)
 
 # About Markdown Compatibility
 
