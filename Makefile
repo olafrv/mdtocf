@@ -80,7 +80,6 @@ github-release:
 	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
 	git diff --exit-code
 	git diff --cached --exit-code
-	git push
 	git tag -d ${VERSION} || /bin/true
 	git push --delete origin ${VERSION} || /bin/true
 	git tag ${VERSION} 
