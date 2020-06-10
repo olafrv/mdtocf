@@ -5,8 +5,8 @@ import setuptools
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
-with open("requirements.txt", "r") as fh:
-    requirements = [line.strip() for line in fh]
+# with open("requirements.txt", "r") as fh:
+#    requirements = [line.strip() for line in fh]
 
 with open("VERSION", "r") as fh:
     version = fh.readline()
@@ -27,5 +27,5 @@ setuptools.setup(
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.7',
-    install_requires=requirements,
+    # install_requires=requirements,
 )
