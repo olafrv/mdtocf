@@ -21,7 +21,9 @@ install: python-version
 	${PYTHON} -m pip install -r requirements.txt
 
 install-pypi: python-version
-	${PYTHON} -m pip install mdtocf  
+	${PYTHON} -m pip install mdtocf
+	# Until we find a solution for install_requires in setup.py
+	${PYTHON} -m pip install -r requirements.txt
 
 uninstall: python-version
 	${PYTHON} -m pip uninstall -y -r requirements.txt
