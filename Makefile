@@ -76,6 +76,7 @@ github-release-delete:
 github-release:
     # https://developer.github.com/v3/repos/releases/#create-a-release
 	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
+	git add . ; git commit
 	git diff; git diff | wc -l | grep "^0$$"
 	git tag -d ${VERSION} || /bin/true
 	git push --delete origin ${VERSION} || /bin/true
