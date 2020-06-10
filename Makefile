@@ -83,9 +83,10 @@ github-release:
 	git push
 	git tag -d ${VERSION} || /bin/true
 	git push --delete origin ${VERSION} || /bin/true
-	git tag ${VERSION} ; \
-	git push origin ${VERSION} ; \
-	echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
+	git tag ${VERSION} 
+	git push origin ${VERSION}
+	# DO NOT REMOVE @ credentials will be exposed!!!
+	@echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
 
 # Docker Image
 
