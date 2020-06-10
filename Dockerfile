@@ -2,7 +2,7 @@
 
 FROM ubuntu:18.04 AS stage1
 RUN apt update \
-    && apt install -y virtualenv python3.7 python-pip \
+    && apt install -y virtualenv python3.7 python-pip git \
     && apt clean -y
 
 FROM stage1 as stage2

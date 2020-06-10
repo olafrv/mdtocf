@@ -71,9 +71,17 @@ clean: pypi-clean docker-clean
 # Second, git push --delete origin 1.0.4
 # Finally, https://github.com/olafrv/mdtocf/releases (Discard Danlging Draft)
 
+github-release-delete:
+
 github-release:
     # https://developer.github.com/v3/repos/releases/#create-a-release
 	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
+	git diff; git diff | wc -l | grep "^0$$"
+	git commit
+	git tag -d ${VERSION} || /bin/true
+	git push --delete origin ${VERSION} || /bin/true
+	git tag ${VERSION} ; \
+	git push origin ${VERSION} ; \
 	echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
 
 # Docker Image
