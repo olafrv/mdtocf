@@ -80,10 +80,8 @@ github-release:
 	# https://developer.github.com/changes/2020-02-10-deprecating-auth-through-query-param/
 	git diff --exit-code
 	git diff --cached --exit-code
-	git tag -d ${VERSION} || /bin/true
-	git push --delete origin ${VERSION} || /bin/true
-	git tag ${VERSION} 
-	git push origin ${VERSION}
+	git tag -d ${VERSION} && git push --delete origin ${VERSION} || /bin/true
+	git tag ${VERSION} && git push origin ${VERSION}
 	# DO NOT REMOVE @ credentials will be exposed!!!
 	@echo '${API_JSON}' | curl -H 'Authorization: token ${GH_TOKEN}' -d @- https://api.github.com/repos/olafrv/mdtocf/releases
 
