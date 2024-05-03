@@ -6,6 +6,5 @@
 git+https://github.com/atlassian-api/atlassian-python-api.git@5b860b444283cd3fb7eddc5659996db9a5165a89
 
 Pygments==2.15.0
-mistune==2.0.0a4
-
+mistune==2.0.3
 pickleDB==0.9.2
