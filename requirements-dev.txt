@@ -5,5 +5,5 @@
 flake8==3.8.2
 pipdeptree==0.13.2
 pylint==2.5.2
-setuptools==70.0.0
+setuptools==78.1.1
 wheel==0.38.1
