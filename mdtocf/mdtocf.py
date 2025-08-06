@@ -8,8 +8,7 @@ import argparse
 from mdtocf.classes.ConfluencePublisher import ConfluencePublisher
 
 
-def main():
-    parser = argparse.ArgumentParser()
+def main(parser: argparse.ArgumentParser) -> None:
     parser.add_argument(
         "--confluenceUsername", required=True, help='e.g. "example@example.com"'
     )
@@ -79,4 +78,5 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    main(parser=parser)
