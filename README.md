@@ -56,9 +56,9 @@ The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API)
 
 Rendering and publishing **./examples** produce the following final result in Confluence:
 
-![Result #1](./examples/A/example.png)
+![Result #1](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/A/example.png)
 
-![Result #2](./examples/example.png)
+![Result #2](https://raw.githubusercontent.com/olafrv/mdtocf/master/examples/example.png)
 
 # About Markdown Compatibility
 
