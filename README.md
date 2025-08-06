@@ -123,10 +123,8 @@ git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
 python3 -m venv venv
 source venv/bin/activate
-pip install -e .
+./release.sh  # development and release to PyPI flow
 ```
-
-See [release.sh](./release.sh) for the development and release process.
 
 # References
 
