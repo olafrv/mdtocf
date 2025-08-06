@@ -55,6 +55,10 @@ rm -rf ./dist ./build *.egg-info
 echo "Building the package..."
 python -m build
 
+echo "Pushing changes remote repository..."
+git push
+git push --tags
+
 if [ "$1" == "live" ]; then
 	echo "Publishing to PyPI..."
 	python -m twine upload --username __token__ --password "${PYPI_LIVE_TOKEN}" dist/*
