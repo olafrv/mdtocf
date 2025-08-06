@@ -5,12 +5,21 @@
 
 set -e
 
-echo "Activating virtual environment..."
-source venv/bin/activate 2>/dev/null || { 
-	./install.sh && source venv/bin/activate; 
-}
+if [ -z "$1" ]; then
+	echo "Usage: $0 <live|test>"
+	echo "  live: Publish to PyPI"
+	echo "  test: Publish to Test PyPI"
+	sleep 1
+fi
 
-echo "Installing required dev packages..."
+echo "Checking virutual environment..."
+python3 -m venv venv
+
+echo "Activating virtual environment..."
+source venv/bin/activate
+
+echo "Installing required packages..."
+pip install -e .  # pyproject.toml => project.dependencies
 pip install -e .[dev]  # pyproject.toml => project.optional-dependencies
 
 echo "Running tests..."
@@ -34,8 +43,8 @@ python -m build
 
 if [ "$1" == "live" ]; then
 	echo "Publishing to PyPI..."
-	python -m twine upload --skip-existing --username __token__ --password "${PYPI_LIVE_TOKEN}" dist/*
+	python -m twine upload --username __token__ --password "${PYPI_LIVE_TOKEN}" dist/*
 elif [ "$1" == "test" ]; then
 	echo "Publishing to (Test) PyPI..."
-	python -m twine upload --skip-existing --username __token__ --password "${PYPI_TEST_TOKEN}" --repository testpypi dist/*
+	python -m twine upload --username __token__ --password "${PYPI_TEST_TOKEN}" --repository testpypi dist/*
 fi
