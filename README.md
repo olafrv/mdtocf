@@ -4,6 +4,8 @@ Markdown files/directory publishing to Atlassian Confluence.
 
 ## Install from PyPI
 
+https://pypi.org/project/mdtocf/
+
 ```bash
 # python3 -m venv venv
 # source venv/bin/activate
