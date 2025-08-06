@@ -2,19 +2,18 @@
 
 Markdown files/directory publishing to Atlassian Confluence.
 
-## Prepare the Environment
+## Install from PyPI
 
-```shell
-git clone "https://github.com/olafrv/mdtocf.git"
-./install.sh  # chmod +x install.sh
-source venv/bin/activate
-python3 -m mdtocf.mdtocf --help
-deactivate
+```bash
+# python3 -m venv venv
+# source venv/bin/activate
+pip install mdtocf
 ```
 
 ## Publish to Confluence
 
 ```bash
+python3 -m mdtocf.mdtocf --help
 ###
 # Example usage:
 # https://olafrv.atlassian.net/wiki/spaces/~5ed387058884020c24da5a42/pages/131089/Test
@@ -24,7 +23,6 @@ deactivate
 # - confluenceSpace: the target Confluence space ID, e.g. ~5ed387058884020c24da5a42
 # - confluenceParentPageId: the target parent page ID, e.g. 131089
 ###
-source venv/bin/activate
 python3 -m mdtocf.mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "${CONFLUENCE_API_TOKEN}" \
@@ -34,7 +32,6 @@ python3 -m mdtocf.mdtocf \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
     --db ./examples.db
-deactivate
 ```
 
 ## Console Output
@@ -117,7 +114,17 @@ kind: index
 It is parsed and partially used by this script to organize the content in
 Atlassian Confluence.
 
-## Development
+# Development
+
+Install from source as local editable package:
+
+```bash
+git clone "https://github.com/olafrv/mdtocf.git"
+cd mdtocf
+python3 -m venv venv
+source venv/bin/activate
+pip install -e .
+```
 
 See [release.sh](./release.sh) for the development and release process.
 
@@ -132,7 +139,7 @@ See [release.sh](./release.sh) for the development and release process.
 * https://pip.pypa.io/en/latest/reference/pip_install/#requirements-file-format
 * https://packaging.python.org/discussions/install-requires-vs-requirements/
 
-## Markdown
+## Markdown Utils
 
 * https://spec.commonmark.org
 * https://spec.commonmark.org/dingus/
