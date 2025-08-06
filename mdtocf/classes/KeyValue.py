@@ -8,31 +8,31 @@ and XHTML Confluence Content SHA256.
 
 import json
 import hashlib
-import pickledb
+from pickledb import PickleDB
 
 
 class KeyValue:
 
     def __init__(self, dbPath):
-        self.db = pickledb.load(dbPath, False)
+        self.db = PickleDB(dbPath)
 
     def keys(self):
-        return [*self.db.getall()]
+        return [*self.db.all()]
 
     def load(self, key):
         value = self.db.get(key)
-        if value is False:
+        if value is None:
             return {"id": None, "title": "", "sha256": ""}
         else:
             return json.loads(value)
 
     def save(self, key, value):
         self.db.set(key, json.dumps(value))
-        self.db.dump()
+        self.db.save()
 
     def remove(self, key):
-        self.db.rem(key)
-        self.db.dump()
+        self.db.remove(key)
+        self.db.save()
 
     def sha256(self, value):
         h = hashlib.sha256(value.encode())
