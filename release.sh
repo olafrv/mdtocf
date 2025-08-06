@@ -35,6 +35,20 @@ echo "Checking for uncommitted changes..."
 git diff --exit-code
 git diff --cached --exit-code
 
+echo "Checking if git tag matches pyproject.toml version..."
+# Extract version from pyproject.toml using Python
+PROJECT_VERSION=$(python -c "import tomllib; f=open('pyproject.toml','rb'); data=tomllib.load(f); f.close(); print(data['project']['version'])")
+TAG_NAME="${PROJECT_VERSION}"
+
+# Check if the tag exists
+if ! git rev-parse "$TAG_NAME" >/dev/null 2>&1; then
+    echo "Error: Git tag '$TAG_NAME' does not exist for version $PROJECT_VERSION"
+    echo "Please create the tag first: git tag $TAG_NAME"
+    exit 1
+fi
+
+echo "Git tag '$TAG_NAME' found for version $PROJECT_VERSION"
+
 echo "Cleaning up previous builds..."
 rm -rf ./dist ./build *.egg-info
 

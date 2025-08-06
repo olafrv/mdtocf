@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdtocf"
-version = "1.2.5"
+version = "1.2.6"
 authors = [
     {name = "Olaf Reitmaier Veracierta", email = "olafrv@gmail.com"},
 ]
