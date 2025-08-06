@@ -12,7 +12,7 @@ if [ -z "$1" ]; then
 	sleep 1
 fi
 
-echo "Checking virutual environment..."
+echo "Checking virtual environment..."
 python3 -m venv venv
 
 echo "Activating virtual environment..."
