@@ -1,0 +1,50 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mdtocf"
+version = "1.2.0"
+authors = [
+    {name = "Olaf Reitmaier Veracierta", email = "olafrv@gmail.com"},
+]
+description = "Markdown files/directory publishing to Atlassian Confluence"
+readme = "README.md"
+requires-python = ">=3.12"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent"
+]
+license = "MIT"
+dependencies = [
+    "mistune",
+    "pickleDB",
+    "atlassian-python-api",
+]
+keywords = [
+    "markdown",
+    "confluence",
+    "atlassian",
+    "publish",
+    "mdtocf"
+]
+
+[project.optional-dependencies]
+dev = ["black", "pytest", "build", "twine"]
+
+[project.scripts]
+mdtocf = "mdtocf.mdtocf:main"
+
+[project.urls]
+Homepage = "https://github.com/olafrv/mdtocf"
+Repository = "https://github.com/olafrv/mdtocf"
+Issues = "https://github.com/olafrv/mdtocf/issues"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["mdtocf*"]
+
+[tool.setuptools.package-data]
+mdtocf = ["py.typed"]
+

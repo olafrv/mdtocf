@@ -1,55 +1,20 @@
-# Requirements
+# Markdown to Confluence Publisher (mdtocf)
 
-This Python package has been tested and designed for:
+Markdown files/directory publishing to Atlassian Confluence.
 
-* [Ubuntu 18.04 LTS](https://releases.ubuntu.com/)
-* [Python 3.7.5](https://docs.python.org/3/) and several python libraries:
-  * [PickelDB v0.9](https://pythonhosted.org/pickleDB/)
-  * [Mistune v2.0 Markdown Parser](https://mistune.readthedocs.io/en/latest/)
-  * [Atlassian Python API v1.5](https://atlassian-python-api.readthedocs.io/)
-
-Please see [requirements.txt](https://github.com/olafrv/mdtocf/blob/master/requirements.txt)
-for specific python packages/modules versions required.
-
-# Missing Features (Todo)
-
-* Attachments (e.g. images, pdf, etc.)
-
-# Install
-
-Download the package and prepare Python environment alternatives:
+## Prepare the Environment
 
 ```shell
 git clone "https://github.com/olafrv/mdtocf.git"
-cd mdtocf
-make virtualenv
+./install.sh  # chmod +x install.sh
 ```
 
-Install the package for its use:
-
-**Note:** If you skip virtual environment you should ensure using python >= 3.7
+## Publish to Confluence
 
 ```shell
-source venv/bin/activate         # Activate virtual environment (optional)
-make install                     # Option 1: Use local package in ./mdtocf
-make install-pypi                # Option 2: Install package from PyPI
-mkdir -p ~/dbs                   # Create temporal database directory
-deactivate                       # Deactivate virtual environment (if activated)
-```
-
-See an example code in [mdtocf.py](https://github.com/olafrv/mdtocf/blob/master/mdtocf/mdtocf.py)
-and the target *test-publish* inside [Makefile](https://github.com/olafrv/mdtocf/blob/master/Makefile)
-show some parameters examples.
-
-# Publish using local script
-
-**Note:** If you skip virtual environment you should ensure using python >= 3.7
-
-```shell
-source venv/bin/activate               # Virtual environment (if created)
-PYTHON=$(make python-path)             # Used: venv/bin/python or $PATH (python3.7, python3 or python)
-${PYTHON} -m mdtocf.mdtocf --help
-${PYTHON} -m mdtocf.mdtocf \ 
+source venv/bin/activate
+python3 -m mdtocf.mdtocf --help
+python3 -m mdtocf.mdtocf \ 
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "****************" \
     --confluenceUrl "https://olafrv.atlassian.net" \
@@ -57,53 +22,14 @@ ${PYTHON} -m mdtocf.mdtocf \
     --confluenceParentPageId "33114" \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
-    --db ~/dbs/examples.db
-deactivate                             # Deactivate virtual environment (if activated)
+    --db ./examples/examples.db
+deactivate
 ```
 
-# Publish using Docker (Image locally built)
-
-```shell
-make docker
-docker run --rm -it mdtocf --help
-docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
-    --mount type=bind,source=~/dbs,target=/mdtocf/dbs \
-    mdtocf \
-    --confluenceUsername "olafrv@gmail.com" \
-    --confluenceApiToken "****************" \
-    --confluenceUrl "https://olafrv.atlassian.net"   \
-    --confluenceSpace "TEST" \
-    --confluenceParentPageId "33114" \
-    --confluencePageTitlePrefix "[Test] " \
-    --markdownDir "./examples" \
-    --db ~/dbs/examples.db
-```
-
-# Publish using Docker (Image downloaded from Github's Packages)
-
-```shell
-# Check <VERSION> in https://github.com/olafrv/mdtocf/packages 
-export IMAGE=docker.pkg.github.com/olafrv/mdtocf/mdtocf:<VERSION> 
-docker run --rm -it $IMAGE --help
-docker run --rm -it \
-    --mount type=bind,source="$(pwd)"/examples,target=/mdtocf/examples \
-    --mount type=bind,source=~/dbs,target=/mdtocf/dbs \
-    $IMAGE
-    --confluenceUsername "olafrv@gmail.com" \
-    --confluenceApiToken "****************" \
-    --confluenceUrl "https://olafrv.atlassian.net"   \
-    --confluenceSpace "TEST" \
-    --confluenceParentPageId "33114" \
-    --confluencePageTitlePrefix "[Test] " \
-    --markdownDir ./examples \
-    --db ~/dbs/examples.db
-```
-
-# Output and Results
+## Console Output
 
 Output:
-```
+```shell
 DEL => Id: 3409835, Title: [Test] Folder B
 DEL => Id: 3409844, Title: [Test] 1
 DEL => Id: 3409824, Title: [Test] Folder A
@@ -126,7 +52,7 @@ Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
 ```
 The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API).
 
-# Results in Confluence
+## Results in Confluence
 
 Rendering and publishing **./examples** produce the following final result in Confluence:
 
@@ -139,7 +65,11 @@ Rendering and publishing **./examples** produce the following final result in Co
 This scripts depends on [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
 compatible with [CommonMark](https://spec.commonmark.org)
 
-The (optional) metadata heading in markdown (.md) files likes the one which follows below used by [Hugo](https://gohugo.io/getting-started/quick-start/), it is not part of CommonMarkdown standard, but just a popular way of specify in YAML markdown metadata usable for external tools.
+The (optional) metadata heading in markdown (.md) files likes the one which 
+follows below used by [Hugo](https://gohugo.io/getting-started/quick-start/), 
+it is not part of CommonMarkdown standard, but just a popular way of specify 
+in YAML markdown metadata usable for external tools.
+
 ```yaml
 ---
 title: My Page Title
@@ -149,61 +79,38 @@ chapter: true
 kind: index
 ---
 ```
+
 It is parsed and partially used by this script to organize the content in
 Attlasian Confluence. A test for this can be run:
 
 ```shell
-make test-re
-```
-
-# Uninstall
-
-```shell
-source venv/bin/activate         # Activate virtual environment (optional)
-make uninstall                   # Remove installed package and dependencies
-deactivate                       # Deactivate virtual environment (if activated)
-```
-
-# Development & Testing
-
-```shell
-make python-version     # Print detected Python version (also after target "dev")
-make python-path        # Print detected Python binary (also after target "dev")
-make dev                # Virtualenv and install (./mdtocf)
-make test-re            # Test markdown metadata regexp
-make test-publish       # Publish ./examples to Atlassian
-make test-docker        # Test docker image
-make test-gihub-docker  # Test github docker package image
-git commit -a           # After increment VERSION file content
-#make github-package    # Already done by target "github-release"
-#make pypi-live         # Already done by target "github-release"
-make github-release     # Will trigger .github/workflows/mdtocf.yml
-make clean              # Delete temporal dirs, files and docker images
+source venv/bin/activate
+python3 -m mdtocf.tests.regexp ./examples/example.md
 ```
 
 # References
-
-## Markdown
-
-* https://spec.commonmark.org
-* https://spec.commonmark.org/dingus/
-
-## Mistune v2
-
-* https://github.com/lepture/mistune
-* https://mistune.readthedocs.io/en/latest/
 
 ## Python v3
 
 * https://docs.python.org/3/
 * https://docs.python.org/3/howto/regex.html
-* https://pypi.org/project/atlassian-python-api/
-* https://atlassian-python-api.readthedocs.io/confluence.html
+* https://packaging.python.org/tutorials/packaging-projects/
+* https://pip.pypa.io/en/stable/reference/pip_install/#git
+* https://pip.pypa.io/en/latest/reference/pip_install/#requirements-file-format
+* https://packaging.python.org/discussions/install-requires-vs-requirements/
+
+## Markdown
+
+* https://spec.commonmark.org
+* https://spec.commonmark.org/dingus/
+* https://github.com/lepture/mistune
+* https://mistune.readthedocs.io/en/latest/
 
 ## Confluence and Storage Format (Cloud API)
 
+* https://pypi.org/project/atlassian-python-api/
+* https://atlassian-python-api.readthedocs.io/confluence.html
 * https://developer.atlassian.com/cloud/confluence/rest/
-* https://confluence.atlassian.com/doc/confluence-server-documentation-135922.html
 * https://confluence.atlassian.com/doc/confluence-storage-format-790796544.html
 * https://confluence.atlassian.com/doc/macros-139387.html
 * https://confluence.atlassian.com/conf59/code-block-macro-792499083.html

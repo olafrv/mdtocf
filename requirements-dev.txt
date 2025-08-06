@@ -1,9 +1,0 @@
-# https://pip.pypa.io/en/stable/reference/pip_install/#git
-# https://pip.pypa.io/en/latest/reference/pip_install/#requirements-file-format
-# https://packaging.python.org/discussions/install-requires-vs-requirements/
-
-flake8==3.8.2
-pipdeptree==0.13.2
-pylint==2.5.2
-setuptools==78.1.1
-wheel==0.38.1
