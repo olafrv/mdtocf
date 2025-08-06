@@ -7,48 +7,82 @@ Markdown files/directory publishing to Atlassian Confluence.
 ```shell
 git clone "https://github.com/olafrv/mdtocf.git"
 ./install.sh  # chmod +x install.sh
+source venv/bin/activate
+python3 -m mdtocf.mdtocf --help
+deactivate
 ```
 
 ## Publish to Confluence
 
-```shell
+```bash
+###
+# Example usage:
+# https://olafrv.atlassian.net/wiki/spaces/~5ed387058884020c24da5a42/pages/131089/Test
+# - confluenceUsername: your Atlassian account email.
+# - confluenceApiToken: see https://id.atlassian.com/manage-profile/security/api-tokens
+# - confluenceUrl: your Atlassian Confluence URL, e.g. https://olafrv.atlassian.net
+# - confluenceSpace: the target Confluence space ID, e.g. ~5ed387058884020c24da5a42
+# - confluenceParentPageId: the target parent page ID, e.g. 131089
+###
 source venv/bin/activate
-python3 -m mdtocf.mdtocf --help
-python3 -m mdtocf.mdtocf \ 
+python3 -m mdtocf.mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
-    --confluenceApiToken "****************" \
+    --confluenceApiToken "${CONFLUENCE_API_TOKEN}" \
     --confluenceUrl "https://olafrv.atlassian.net" \
-    --confluenceSpace "TEST" \
-    --confluenceParentPageId "33114" \
+    --confluenceSpace "~5ed387058884020c24da5a42" \
+    --confluenceParentPageId "131089" \
     --confluencePageTitlePrefix "[Test] " \
     --markdownDir ./examples \
-    --db ./examples/examples.db
+    --db ./examples.db
 deactivate
 ```
 
 ## Console Output
 
 Output:
-```shell
-DEL => Id: 3409835, Title: [Test] Folder B
-DEL => Id: 3409844, Title: [Test] 1
-DEL => Id: 3409824, Title: [Test] Folder A
-DEL => Id: 3409853, Title: [Test] Page AA
-DEL => Id: att3409862, Title: example.png
-DEL Att. => Title: example.png
-DEL => Id: 3409867, Title: [Test] Example Page
-UPD => Title: [Test] Folder A
-Can't find '[Test] Folder A' page on the https://olafrv.atlassian.net/wiki!
+
+> **UPD** => Update in Confluence.
+> **IDX** => Index page in Confluence.
+> **SKP** => Skip update in Confluence.
+> **DEL** => Delete page in Confluence.
+
+```bash
+# --- Delete ./examples.db file ---
+# --- Delete all pages in Confluence space ---
+# --- 1st run ---
+UPD => Title: [Test] _index.md
 IDX => Title: [Test] Folder B
-Can't find '[Test] Folder B' page on the https://olafrv.atlassian.net/wiki!
-UPD => Title: [Test] 1
-Can't find '[Test] 1' page on the https://olafrv.atlassian.net/wiki!
-UPD => Title: [Test] Page AA
-Can't find '[Test] Page AA' page on the https://olafrv.atlassian.net/wiki!
+UPD => Title: [Test] bb.md
+UPD => Title: [Test] aa.md
 UPD Att. => Title: example.png
+UPD => Title: [Test] example.md
 UPD Att. => Title: example.png
-UPD => Title: [Test] Example Page
-Can't find '[Test] Example Page' page on the https://olafrv.atlassian.net/wiki!
+# --- 2nd run (re-run) ---
+SKP => Title: [Test] _index.md
+SKP => Title: [Test] Folder B
+SKP => Title: [Test] bb.md
+SKP => Title: [Test] aa.md
+DEL Att. => Title: example.png
+UPD Att. => Title: example.png
+SKP => Title: [Test] example.md
+DEL Att. => Title: example.png
+UPD Att. => Title: example.png
+# --- Delete all sub pages in Confluence space ---
+# --- 3nd run ---
+SKP => Title: [Test] _index.md
+Can't find '[Test] _index.md' page on https://olafrv.atlassian.net/wiki
+SKP => Title: [Test] Folder B
+Can't find '[Test] Folder B' page on https://olafrv.atlassian.net/wiki
+SKP => Title: [Test] bb.md
+Can't find '[Test] bb.md' page on https://olafrv.atlassian.net/wiki
+SKP => Title: [Test] aa.md
+Can't find '[Test] aa.md' page on https://olafrv.atlassian.net/wiki
+DEL Att. => Title: example.png
+UPD Att. => Title: example.png
+SKP => Title: [Test] example.md
+Can't find '[Test] example.md' page on https://olafrv.atlassian.net/wiki
+DEL Att. => Title: example.png
+UPD Att. => Title: example.png
 ```
 The *"Can't find..."* means *"not found but creating..."* (Python Atlassian API).
 
