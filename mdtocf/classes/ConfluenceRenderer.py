@@ -12,27 +12,27 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
 
     def __init__(self, confluenceUrl=None):
         self.confluenceUrl = confluenceUrl
-        super().__init__(self)
+        super().__init__()
 
-    def image(self, src, alt="", title=None):
-        if src.find("/") == -1:
+    def image(self, text, url, title=None):
+        if url.find("/") == -1:
             # Attached Image
             return (
                 "<ac:image>"
                 + '<ri:attachment ri:filename="'
-                + src
+                + url
                 + '" />'
                 + "</ac:image>"
             )
         else:
             # External Image
-            return '<ac:image><ri:url ri:value="' + src + '" /></ac:image>'
+            return '<ac:image><ri:url ri:value="' + url + '" /></ac:image>'
 
-    def link(self, link, text=None, title=None):
-        if link.find("/") == -1:
+    def link(self, text, url, title=None):
+        if url.find("/") == -1:
             return (
                 '\n<ac:link><ri:attachment ri:filename="'
-                + link
+                + url
                 + '" />'
                 + "<ac:plain-text-link-body>"
                 + "<![CDATA["
@@ -44,11 +44,11 @@ class ConfluenceRenderer(mistune.HTMLRenderer):
         else:
             return (
                 '<a href="'
-                + link
+                + url
                 + '" alt="'
                 + (title if title is not None else "")
                 + '">'
-                + (text if text is not None else link)
+                + (text if text is not None else url)
                 + "</a>"
             )
 

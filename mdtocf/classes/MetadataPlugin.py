@@ -32,7 +32,6 @@ class MetadataPlugin:
         return ""  # No xhtml page content, just extracting page title
 
     def plugin_metadata(self, md):
-        md.block.register_rule("metadata", self.METADATA_PATTERN, self.parse_metadata)
-        md.block.rules.append("metadata")
+        md.block.register("metadata", self.METADATA_PATTERN, self.parse_metadata)
         if md.renderer.NAME == "html":
             md.renderer.register("metadata", self.render_html_metadata)
