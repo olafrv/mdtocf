@@ -16,6 +16,14 @@ if [ -z "$1" ]; then
 	exit 1
 fi
 
+if [ "$1" == "live" ] && [ -z "$PYPI_LIVE_TOKEN" ]; then
+	echo "Error: PYPI_LIVE_TOKEN is not set."
+	exit 1
+elif [ "$1" == "test" ] && [ -z "$PYPI_TEST_TOKEN" ]; then
+	echo "Error: PYPI_TEST_TOKEN is not set."
+	exit 1
+fi
+
 echo "Setting up virtual environment..."
 if [ ! -f .venv/bin/uv ]; then
     python3 -m venv .venv && .venv/bin/pip install uv --quiet
