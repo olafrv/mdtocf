@@ -1,7 +1,7 @@
-"""Mistune v2 renderer for Confluence Storage Format (XHTML)
+"""Mistune v3 renderer for Confluence Storage Format (XHTML)
 
 Used by ConfluencePublisher class to parse Markdown using
-mistune v2 and convert it to Confluence XHTML Storage Format.
+mistune v3 and convert it to Confluence XHTML Storage Format.
 
 """
 

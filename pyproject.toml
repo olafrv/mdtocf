@@ -45,6 +45,4 @@ Issues = "https://github.com/olafrv/mdtocf/issues"
 where = ["."]
 include = ["mdtocf*"]
 
-[tool.setuptools.package-data]
-mdtocf = ["py.typed"]
 

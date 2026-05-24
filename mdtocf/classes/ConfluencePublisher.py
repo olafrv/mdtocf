@@ -56,10 +56,8 @@ class ConfluencePublisher:
         self.renderer.block.rules.remove("thematic_break")
 
     def __getFileContent(self, filepath):
-        file = open(filepath, mode="r")
-        content = file.read()
-        file.close()
-        return content
+        with open(filepath, mode="r") as file:
+            return file.read()
 
     def __updatePage(self, space, parentId, filepath, autoindex=False):
 
@@ -95,15 +93,15 @@ class ConfluencePublisher:
         # --- Render (END)
 
         if currentTitle and currentTitle != title:
-            print("REN => Title: " + title)
+            print(f"REN => Title: {title}")
             pageId = self.api.get_page_id(space, currentTitle)
             self.api.update_page(pageId, title, body)
 
         if currentHash != hash or self.forceUpdate:
             if autoindex:
-                print("IDX => Title: " + title)
+                print(f"IDX => Title: {title}")
             else:
-                print("UPD => Title: " + title)
+                print(f"UPD => Title: {title}")
 
             if self.api.update_or_create(
                 parent_id=parentId, title=title, body=body, representation="storage"
@@ -114,7 +112,7 @@ class ConfluencePublisher:
             else:
                 return None
         else:
-            print("SKP => Title: " + title)
+            print(f"SKP => Title: {title}")
             return self.api.get_page_id(space, title)
 
     def __deleteAttachment(self, filepath):
@@ -122,7 +120,7 @@ class ConfluencePublisher:
         filename = os.path.basename(filepath)
         if metadata["id"]:
             try:
-                print("DEL Att. => Title: " + filename)
+                print(f"DEL Att. => Title: {filename}")
                 # https://confluence.atlassian.com/confkb/confluence-rest-api-lacks-delete-method-for-attachments-715361922.html
                 # self.api.delete_attachment_by_id(metadata['id'], 1)
                 self.api.remove_content(metadata["id"])
@@ -132,7 +130,7 @@ class ConfluencePublisher:
     def __updateAttachment(self, space, pageId, filepath):
         filename = os.path.basename(filepath)
 
-        print("UPD Att. => Title: " + filename)
+        print(f"UPD Att. => Title: {filename}")
         results = self.api.attach_file(
             filepath, name=filename, page_id=pageId, space=space
         )
@@ -185,7 +183,7 @@ class ConfluencePublisher:
             if self.forceDelete or (
                 not os.path.isfile(filepath) and not indexWithChilds
             ):
-                print("DEL => Id: " + metadata["id"] + ", Title: " + metadata["title"])
+                print(f"DEL => Id: {metadata['id']}, Title: {metadata['title']}")
                 if filepath.endswith(".md"):
                     try:
                         if self.api.get_page_by_id(metadata["id"]):
@@ -193,7 +191,7 @@ class ConfluencePublisher:
                     except HTTPError as ex:
                         code = ex.response.status_code
                         if code != 404:
-                            print("DEL Pag. (Error):" + str(code))
+                            print(f"DEL Pag. (Error): {code}")
                         else:
                             pass
                 else:
