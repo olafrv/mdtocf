@@ -3,6 +3,47 @@ from pathlib import Path
 from mdtocf.classes.MetadataPlugin import MetadataPlugin
 
 
+class TestExtract:
+    def test_title_extracted(self):
+        plugin = MetadataPlugin()
+        meta, body = plugin.extract("---\ntitle: Hello World\n---\n# Heading")
+        assert meta["title"] == "Hello World"
+        assert "# Heading" in body
+
+    def test_frontmatter_stripped_from_body(self):
+        plugin = MetadataPlugin()
+        _, body = plugin.extract("---\ntitle: My Page\n---\n\nSome content")
+        assert "---" not in body
+        assert "title:" not in body
+
+    def test_colon_in_value(self):
+        plugin = MetadataPlugin()
+        meta, _ = plugin.extract("---\ndate: 2019-03-26T08:47:11+01:00\ntitle: My Page\n---\n")
+        assert meta["title"] == "My Page"
+        assert meta["date"] == "2019-03-26T08:47:11+01:00"
+
+    def test_no_frontmatter_returns_empty_dict(self):
+        plugin = MetadataPlugin()
+        meta, body = plugin.extract("# Just a heading\n")
+        assert meta == {}
+        assert body == "# Just a heading\n"
+
+    def test_multiple_keys(self):
+        plugin = MetadataPlugin()
+        meta, _ = plugin.extract("---\ntitle: Page\nchapter: true\nkind: index\n---\n")
+        assert meta["title"] == "Page"
+        assert meta["chapter"] == "true"
+        assert meta["kind"] == "index"
+
+    def test_example_file(self):
+        example = Path(__file__).parent.parent / "examples" / "example.md"
+        if example.exists():
+            plugin = MetadataPlugin()
+            meta, body = plugin.extract(example.read_text())
+            assert meta.get("title") == "Example Page"
+            assert "---" not in body.split("\n")[0]
+
+
 class TestMetadataPlugin:
     """Test cases for MetadataPlugin regex pattern matching."""
 
@@ -105,13 +146,11 @@ chapter: true
 
 
 def test_metadata_plugin_instantiation():
-    """Test that MetadataPlugin can be instantiated."""
     plugin = MetadataPlugin()
     assert plugin is not None
     assert hasattr(plugin, "METADATA_PATTERN")
-    assert hasattr(plugin, "stack")
+    assert hasattr(plugin, "extract")
 
 
 if __name__ == "__main__":
-    # Allow running the test file directly
     pytest.main([__file__])

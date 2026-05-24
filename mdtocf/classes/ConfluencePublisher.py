@@ -48,12 +48,8 @@ class ConfluencePublisher:
                 "footnotes",
                 "table",
                 "url",
-                self.metadataPlugin.plugin_metadata,
             ],
         )
-
-        # Hack to allow metadata plugin to work (See mistune/block_parser.py)
-        self.renderer.block.rules.remove("thematic_break")
 
     def __getFileContent(self, filepath):
         with open(filepath, mode="r") as file:
@@ -72,25 +68,21 @@ class ConfluencePublisher:
         currentHash = metadata["sha256"]
         hash = self.kv.sha256(markdown)
 
-        # --- Render (BEGIN)
-        self.metadataPlugin.stack["title"] = None
+        frontmatter, markdown = self.metadataPlugin.extract(markdown)
 
         if autoindex:
             body = self.confluenceRenderer.generate_autoindex()
         else:
             body = self.renderer(markdown)
 
-        if self.metadataPlugin.stack["title"] is None:
-            if autoindex:
-                title = "Folder " + os.path.basename(os.path.dirname(filepath))
-            else:
-                title = os.path.basename(filepath)
+        if "title" in frontmatter:
+            title = frontmatter["title"]
+        elif autoindex:
+            title = "Folder " + os.path.basename(os.path.dirname(filepath))
         else:
-            title = self.metadataPlugin.stack["title"]
+            title = os.path.basename(filepath)
 
         title = self.pageTitlePrefix + title
-        # >>> Removed: + " [" + self.kv.sha256(filepath)[-6:] + "]"
-        # --- Render (END)
 
         if currentTitle and currentTitle != title:
             print(f"REN => Title: {title}")

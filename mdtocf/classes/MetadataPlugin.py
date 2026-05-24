@@ -1,7 +1,7 @@
 """Mistune v3 Plugin for Reading Markdown Metadata
 
-Used by ConfluenceRenderer to enable the parsing of page title,
-later used for setting the page tile using Confluence API.
+Used by ConfluencePublisher to extract page title from YAML front matter
+and strip it from the markdown before rendering.
 
 """
 
@@ -10,29 +10,27 @@ import re
 
 class MetadataPlugin:
 
-    def __init__(self):
-        self.stack = {"title": None}
-
     METADATA_PATTERN = re.compile(
         (r"(?:---)" r"((?:\s+)([a-z]+ *:[ \S]+(?:\s+))+)" r"(?:---)"), flags=re.M | re.I
     )
 
-    def parse_metadata(self, parser, match, state):
-        lines = match.group(1).split("\n")
-        non_empty_lines = [line for line in lines if line.strip() != ""]
-        for line in non_empty_lines:
-            if line != "":
+    def extract(self, markdown):
+        """Return (metadata_dict, stripped_markdown).
+
+        Strips the YAML front matter block from markdown and parses its
+        key/value pairs. Returns an empty dict and the original markdown
+        unchanged if no front matter is found.
+        """
+        match = self.METADATA_PATTERN.match(markdown)
+        if not match:
+            return {}, markdown
+
+        metadata = {}
+        for line in match.group(1).split("\n"):
+            line = line.strip()
+            if line:
                 key, value = line.split(":", 1)
-                if (key.strip()) == "title":
-                    title = value.strip()
-                    self.stack["title"] = title
+                metadata[key.strip().lower()] = value.strip()
 
-        return {"type": "newline", "blank": True}  # Return just line break
-
-    def render_html_metadata(self, title):
-        return ""  # No xhtml page content, just extracting page title
-
-    def plugin_metadata(self, md):
-        md.block.register("metadata", self.METADATA_PATTERN, self.parse_metadata)
-        if md.renderer.NAME == "html":
-            md.renderer.register("metadata", self.render_html_metadata)
+        stripped = markdown[match.end():].lstrip("\n")
+        return metadata, stripped
