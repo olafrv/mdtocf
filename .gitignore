@@ -4,6 +4,8 @@ __pycache__
 # Virtual Environment
 venv
 .venv
+# Secrets
+.env
 # Test
 dbs
 *.db
