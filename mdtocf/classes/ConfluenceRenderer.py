@@ -9,7 +9,6 @@ import mistune
 
 
 class ConfluenceRenderer(mistune.HTMLRenderer):
-
     def __init__(self, confluenceUrl=None):
         self.confluenceUrl = confluenceUrl
         super().__init__()

@@ -15,7 +15,6 @@ from requests import HTTPError
 
 
 class ConfluencePublisher:
-
     def __init__(
         self,
         url,

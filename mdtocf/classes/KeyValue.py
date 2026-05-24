@@ -12,7 +12,6 @@ from pickledb import PickleDB
 
 
 class KeyValue:
-
     def __init__(self, dbPath):
         self.db = PickleDB(dbPath)
 

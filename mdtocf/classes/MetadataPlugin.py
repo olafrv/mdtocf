@@ -9,7 +9,6 @@ import re
 
 
 class MetadataPlugin:
-
     METADATA_PATTERN = re.compile(
         (r"(?:---)" r"((?:\s+)([a-z]+ *:[ \S]+(?:\s+))+)" r"(?:---)"), flags=re.M | re.I
     )
@@ -32,5 +31,5 @@ class MetadataPlugin:
                 key, value = line.split(":", 1)
                 metadata[key.strip().lower()] = value.strip()
 
-        stripped = markdown[match.end():].lstrip("\n")
+        stripped = markdown[match.end() :].lstrip("\n")
         return metadata, stripped

@@ -10,11 +10,16 @@ def renderer():
 class TestImage:
     def test_attached_image(self, renderer):
         result = renderer.image("alt text", "diagram.png")
-        assert result == '<ac:image><ri:attachment ri:filename="diagram.png" /></ac:image>'
+        assert (
+            result == '<ac:image><ri:attachment ri:filename="diagram.png" /></ac:image>'
+        )
 
     def test_external_image(self, renderer):
         result = renderer.image("alt text", "https://example.com/img.png")
-        assert result == '<ac:image><ri:url ri:value="https://example.com/img.png" /></ac:image>'
+        assert (
+            result
+            == '<ac:image><ri:url ri:value="https://example.com/img.png" /></ac:image>'
+        )
 
     def test_attached_image_title_ignored(self, renderer):
         result = renderer.image("alt", "file.png", title="My Title")

@@ -18,7 +18,9 @@ class TestExtract:
 
     def test_colon_in_value(self):
         plugin = MetadataPlugin()
-        meta, _ = plugin.extract("---\ndate: 2019-03-26T08:47:11+01:00\ntitle: My Page\n---\n")
+        meta, _ = plugin.extract(
+            "---\ndate: 2019-03-26T08:47:11+01:00\ntitle: My Page\n---\n"
+        )
         assert meta["title"] == "My Page"
         assert meta["date"] == "2019-03-26T08:47:11+01:00"
 
