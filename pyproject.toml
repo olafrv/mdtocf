@@ -31,7 +31,7 @@ keywords = [
 ]
 
 [dependency-groups]
-dev = ["black", "pytest", "twine"]
+dev = ["ruff", "pytest", "twine"]
 
 [project.scripts]
 mdtocf = "mdtocf.mdtocf:main"

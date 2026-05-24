@@ -19,7 +19,7 @@ echo "Running tests..."
 uv run pytest tests
 
 echo "Running code formatting checks..."
-uv run black --check . || {
+uv run ruff format --check . || {
 	echo "Fix code formatting issues before releasing."
 	exit 1
 }
