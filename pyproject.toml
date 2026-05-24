@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mdtocf"
-version = "1.2.7"
+version = "1.2.8"
 authors = [
     {name = "Olaf Reitmaier Veracierta", email = "olafrv@gmail.com"},
 ]
@@ -19,8 +19,8 @@ classifiers = [
 license = "MIT"
 dependencies = [
     "mistune==3.2.1",
-    "pickleDB==1.3.2",
-    "atlassian-python-api==4.0.4",
+    "pickleDB==1.6",
+    "atlassian-python-api==4.0.7",
 ]
 keywords = [
     "markdown",
