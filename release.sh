@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Python Package Build and Release 
+# Python Package Build and Release
 # https://pypi.org/project/mdtocf/
 
 set -e
@@ -12,21 +12,14 @@ if [ -z "$1" ]; then
 	sleep 1
 fi
 
-echo "Checking virtual environment..."
-python3 -m venv venv
-
-echo "Activating virtual environment..."
-source venv/bin/activate
-
-echo "Installing required packages..."
-pip install -e .  # pyproject.toml => project.dependencies
-pip install -e .[dev]  # pyproject.toml => project.optional-dependencies
+echo "Setting up virtual environment..."
+uv sync --group dev
 
 echo "Running tests..."
-pytest tests
+uv run pytest tests
 
 echo "Running code formatting checks..."
-black --check . || {
+uv run black --check . || {
 	echo "Fix code formatting issues before releasing."
 	exit 1
 }
@@ -36,8 +29,7 @@ git diff --exit-code
 git diff --cached --exit-code
 
 echo "Checking if git tag matches pyproject.toml version..."
-# Extract version from pyproject.toml using Python
-PROJECT_VERSION=$(python -c "import tomllib; f=open('pyproject.toml','rb'); data=tomllib.load(f); f.close(); print(data['project']['version'])")
+PROJECT_VERSION=$(uv run python -c "import tomllib; f=open('pyproject.toml','rb'); data=tomllib.load(f); f.close(); print(data['project']['version'])")
 TAG_NAME="${PROJECT_VERSION}"
 
 # Check if the tag exists
@@ -53,7 +45,7 @@ echo "Cleaning up previous builds..."
 rm -rf ./dist ./build *.egg-info
 
 echo "Building the package..."
-python -m build
+uv build
 
 echo "Pushing changes remote repository..."
 git push
@@ -61,8 +53,8 @@ git push --tags
 
 if [ "$1" == "live" ]; then
 	echo "Publishing to PyPI..."
-	python -m twine upload --username __token__ --password "${PYPI_LIVE_TOKEN}" dist/*
+	uvx twine upload --username __token__ --password "${PYPI_LIVE_TOKEN}" dist/*
 elif [ "$1" == "test" ]; then
 	echo "Publishing to (Test) PyPI..."
-	python -m twine upload --username __token__ --password "${PYPI_TEST_TOKEN}" --repository testpypi dist/*
+	uvx twine upload --username __token__ --password "${PYPI_TEST_TOKEN}" --repository testpypi dist/*
 fi

@@ -7,15 +7,19 @@ Markdown files/directory publishing to Atlassian Confluence.
 https://pypi.org/project/mdtocf/
 
 ```bash
-# python3 -m venv venv
-# source venv/bin/activate
-pip install mdtocf
+uv tool install mdtocf
+```
+
+Or into a project virtual environment:
+
+```bash
+uv add mdtocf
 ```
 
 ## Publish to Confluence
 
 ```bash
-python3 -m mdtocf.mdtocf --help
+mdtocf --help
 ###
 # Example usage:
 # https://olafrv.atlassian.net/wiki/spaces/~5ed387058884020c24da5a42/pages/131089/Test
@@ -25,7 +29,7 @@ python3 -m mdtocf.mdtocf --help
 # - confluenceSpace: the target Confluence space ID, e.g. ~5ed387058884020c24da5a42
 # - confluenceParentPageId: the target parent page ID, e.g. 131089
 ###
-python3 -m mdtocf.mdtocf \
+mdtocf \
     --confluenceUsername "olafrv@gmail.com" \
     --confluenceApiToken "${CONFLUENCE_API_TOKEN}" \
     --confluenceUrl "https://olafrv.atlassian.net" \
@@ -95,7 +99,7 @@ Rendering and publishing **./examples** produce the following final result in Co
 
 # About Markdown Compatibility
 
-This scripts depends on [Mistune v2 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
+This scripts depends on [Mistune v3 Markdown Parser](https://mistune.readthedocs.io/en/latest/),
 compatible with [CommonMark](https://spec.commonmark.org)
 
 The (optional) metadata heading in markdown (.md) files likes the one which 
@@ -123,9 +127,9 @@ Install from source as local editable package:
 ```bash
 git clone "https://github.com/olafrv/mdtocf.git"
 cd mdtocf
-python3 -m venv venv
-source venv/bin/activate
-./release.sh  # development and release to PyPI flow
+uv sync --group dev   # creates .venv and installs all dependencies
+uv run pytest tests   # run tests
+./release.sh          # full build and release to PyPI flow
 ```
 
 # References
@@ -135,8 +139,7 @@ source venv/bin/activate
 * https://docs.python.org/3/
 * https://docs.python.org/3/howto/regex.html
 * https://packaging.python.org/tutorials/packaging-projects/
-* https://pip.pypa.io/en/stable/reference/pip_install/#git
-* https://pip.pypa.io/en/latest/reference/pip_install/#requirements-file-format
+* https://docs.astral.sh/uv/
 * https://packaging.python.org/discussions/install-requires-vs-requirements/
 
 ## Markdown Utils

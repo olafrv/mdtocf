@@ -18,7 +18,7 @@ classifiers = [
 ]
 license = "MIT"
 dependencies = [
-    "mistune==3.1.3",
+    "mistune==3.2.1",
     "pickleDB==1.3.2",
     "atlassian-python-api==4.0.4",
 ]
@@ -30,8 +30,8 @@ keywords = [
     "mdtocf"
 ]
 
-[project.optional-dependencies]
-dev = ["black", "pytest", "build", "twine"]
+[dependency-groups]
+dev = ["black", "pytest", "twine"]
 
 [project.scripts]
 mdtocf = "mdtocf.mdtocf:main"
