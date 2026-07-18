@@ -18,7 +18,7 @@ classifiers = [
 ]
 license = "MIT"
 dependencies = [
-    "mistune==3.2.1",
+    "mistune==3.3.0",
     "pickleDB==1.6",
     "atlassian-python-api==4.0.7",
 ]
